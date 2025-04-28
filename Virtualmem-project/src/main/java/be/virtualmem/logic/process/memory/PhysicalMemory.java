@@ -25,7 +25,8 @@ public class PhysicalMemory {
         return instance;
     }
 
-    public void insertPage(Page page) {
-
+    public Frame insertPage(Page page) {
+        // Return the frame where the page was inserted based on
+        return null;
     }
 }

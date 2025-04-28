@@ -1,7 +1,5 @@
 package be.virtualmem.logic.process.memory.entry;
 
-import java.io.IOException;
-
 public class PageTableEntry implements IPageEntry {
     private byte accessible; // Is it accessible by the process
     private byte present; // Is it in memory
