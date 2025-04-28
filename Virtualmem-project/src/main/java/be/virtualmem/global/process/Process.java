@@ -1,5 +1,7 @@
 package be.virtualmem.global.process;
 
+import be.virtualmem.logic.process.memory.ProcessMemory;
+
 public class Process implements IProcess {
     private int pid;
     private ProcessMemory processMemory;

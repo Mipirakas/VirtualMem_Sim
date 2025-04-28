@@ -1,4 +1,5 @@
 package be.virtualmem.logic.process.memory;
 
-public interface IPage {
+public class Frame {
+    private Page page;
 }

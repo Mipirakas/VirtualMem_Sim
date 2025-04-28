@@ -2,7 +2,7 @@ package be.virtualmem.logic.process;
 
 import be.virtualmem.global.process.IProcess;
 import be.virtualmem.global.process.Process;
-import be.virtualmem.global.process.ProcessMemory;
+import be.virtualmem.logic.process.memory.ProcessMemory;
 
 import java.util.HashMap;
 import java.util.Map;

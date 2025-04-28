@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public class PageTableStructure {
-    private Map<Integer, List<IPageTable>> pageTables; // <PageTableLevel, ListWithPageTables>
+    private Map<Integer, List<IPageTable>> pageTableStructure; // <PageTableLevel, ListWithPageTables>
 
     public PageTableStructure(int levels) {
-        pageTables = new HashMap<>();
+        pageTableStructure = new HashMap<>();
         for (int i = 0; i < levels; i++) {
-            pageTables.put(i, new ArrayList<>());
+            pageTableStructure.put(i, new ArrayList<>());
         }
     }
+
+
 }
