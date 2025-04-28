@@ -1,6 +1,6 @@
 package be.virtualmem.global.instruction;
 
-import be.virtualmem.logic.IProcessList;
+import be.virtualmem.logic.process.IProcessManager;
 
 public class End implements IInstruction {
     private int pid;
@@ -10,7 +10,7 @@ public class End implements IInstruction {
     }
 
     @Override
-    public void execute(IProcessList list) {
-
+    public void execute(IProcessManager processManager) {
+        processManager.endProcess(pid);
     }
 }

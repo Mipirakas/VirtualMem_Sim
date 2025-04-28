@@ -2,10 +2,21 @@ package be.virtualmem.global.process;
 
 public class Process implements IProcess {
     private int pid;
-    // Page table
+    private ProcessMemory processMemory;
 
-    public Process(int pid){
+    // Construction = start process
+    public Process(int pid, ProcessMemory processMemory) {
         this.pid = pid;
+        this.processMemory = processMemory;
+    }
+
+    @Override
+    public ProcessMemory getProcessMemory() {
+        return processMemory;
+    }
+
+    public void end(){
+        processMemory.free(); // Free all memory this process allocated
     }
 
 }

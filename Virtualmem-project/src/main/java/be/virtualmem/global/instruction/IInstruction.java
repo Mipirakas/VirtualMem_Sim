@@ -1,7 +1,7 @@
 package be.virtualmem.global.instruction;
 
-import be.virtualmem.logic.IProcessList;
+import be.virtualmem.logic.process.IProcessManager;
 
 public interface IInstruction {
-    void execute(IProcessList list);
+    void execute(IProcessManager processManager);
 }
