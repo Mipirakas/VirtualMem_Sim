@@ -14,6 +14,6 @@ public class Read implements IInstruction {
 
     @Override
     public void execute(IProcessManager processManager) {
-        processManager.getProcess(pid).getProcessMemory(address);
+        processManager.getProcess(pid).getProcessMemory().read(address);
     }
 }
