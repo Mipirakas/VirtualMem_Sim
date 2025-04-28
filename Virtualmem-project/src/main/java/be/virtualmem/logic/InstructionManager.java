@@ -1,5 +1,7 @@
 package be.virtualmem.logic;
 
+import be.virtualmem.data.InstructionReader;
+import be.virtualmem.global.Constants;
 import be.virtualmem.global.instruction.IInstruction;
 import be.virtualmem.logic.process.ProcessManager;
 
@@ -10,7 +12,7 @@ public class InstructionManager {
     private ProcessManager processManager;
 
     public InstructionManager(ProcessManager processManager) {
-        // Read instructions instructionQueue = ...
+        instructionQueue = InstructionReader.readFromFile(Constants.FEW_INSTRUCTION_DATASET);
         this.processManager = processManager;
     }
 
