@@ -1,36 +1,24 @@
 package be.virtualmem.logic;
 
-import be.virtualmem.global.process.IProcess;
+import be.virtualmem.logic.process.ProcessManager;
 
-import java.util.List;
+public class System implements ISystemContext {
+    private ProcessManager processManager;
+    private InstructionManager instructionManager;
 
-public class System implements ISystemContext, IProcessList {
+    // parameter: reallocation algorithm
+    public System() {
+        boot();
+    }
 
     public void boot(){
-
+        // Add the instructions
+        processManager = new ProcessManager();
+        instructionManager = new InstructionManager(processManager);
     }
 
+    // run next instruction
     public void run(){
-
-    }
-
-    @Override
-    public List<IProcess> getProcessList() {
-        return List.of();
-    }
-
-    @Override
-    public IProcess getProcess(int pid) {
-        return null;
-    }
-
-    @Override
-    public void startProcess(IProcess process) {
-
-    }
-
-    @Override
-    public void endProcess(IProcess process) {
-
+        instructionManager.executeNextInstruction();
     }
 }

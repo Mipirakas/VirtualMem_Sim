@@ -1,7 +1,7 @@
 package be.virtualmem.global.instruction;
 
 import be.virtualmem.global.address.IAddress;
-import be.virtualmem.logic.IProcessList;
+import be.virtualmem.logic.process.IProcessManager;
 
 public class Read implements IInstruction {
     private int pid;
@@ -13,7 +13,7 @@ public class Read implements IInstruction {
     }
 
     @Override
-    public void execute(IProcessList list) {
-
+    public void execute(IProcessManager processManager) {
+        processManager.getProcess(pid).getProcessMemory(address);
     }
 }

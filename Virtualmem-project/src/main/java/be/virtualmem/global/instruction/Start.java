@@ -1,7 +1,7 @@
 package be.virtualmem.global.instruction;
 
 import be.virtualmem.global.process.Process;
-import be.virtualmem.logic.IProcessList;
+import be.virtualmem.logic.process.IProcessManager;
 
 public class Start implements IInstruction {
     private int pid;
@@ -11,7 +11,7 @@ public class Start implements IInstruction {
     }
 
     @Override
-    public void execute(IProcessList list) {
-        list.startProcess(new Process(this.pid));
+    public void execute(IProcessManager processManager) {
+        processManager.startProcess(this.pid);
     }
 }
