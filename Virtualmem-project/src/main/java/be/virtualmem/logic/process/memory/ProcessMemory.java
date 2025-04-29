@@ -44,14 +44,7 @@ public class ProcessMemory {
     }
 
     public void map(IAddress address, int size) {
-        PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
-        if (pageTableEntry != null) {
-            try {
-                pageTableEntry.read();
-            } catch (Exception e) { // Make custom exception
-                e.printStackTrace();
-            }
-        }
+
     }
 
     public void unmap(IAddress address, int size) {

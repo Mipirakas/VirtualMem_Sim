@@ -14,8 +14,8 @@ public class Address implements IAddress {
         return bitSet;
     }
 
-    public static BigInteger fromBitSetToBigInteger(BitSet bitSet) {
-        return new BigInteger(bitSet.toByteArray());
+    public static Integer fromBitSetToInteger(BitSet bitSet) {
+        return new BigInteger(bitSet.toByteArray()).intValue();
     }
 
     public static Address fromHexToBitSet(String hex) {

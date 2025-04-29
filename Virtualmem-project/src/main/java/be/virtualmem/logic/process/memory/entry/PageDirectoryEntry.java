@@ -11,6 +11,11 @@ public class PageDirectoryEntry implements IPageEntry {
         this.pointer = pointer;
     }
 
+    public PageDirectoryEntry() {
+        this.pointer = null;
+        this.present = 0;
+    }
+
     public void setPointer(IPageTable pointer) {
         this.pointer = pointer;
         present = pointer == null ? (byte) 0 : (byte) 1;
