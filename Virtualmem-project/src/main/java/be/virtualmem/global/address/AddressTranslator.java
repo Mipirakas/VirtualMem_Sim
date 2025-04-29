@@ -6,13 +6,13 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class AddressTranslator {
-    public static Integer fromAddressToPageTableLevelEntryId(IAddress address, int level) {
-        Integer pageTableEntryId = null;
-        if (Constants.PAGE_TABLE_ENTRIES.length < level) {
+    public static BigInteger fromAddressToPageTableLevelEntryId(IAddress address, int level) {
+        BigInteger pageTableEntryId = null;
+        if (level < Constants.PAGE_TABLE_ENTRIES.length) {
             int pageTableSize = Constants.PAGE_TABLE_ENTRIES[level];
             int startIndex = Arrays.stream(Constants.PAGE_TABLE_ENTRIES).limit(level).sum() + Constants.ADDRESS_UNUSED_BITS;
 
-            pageTableEntryId = Address.fromBitSetToInteger(address.getBitSet().get(startIndex, startIndex + pageTableSize));
+            pageTableEntryId = Address.fromBitSetToBigInteger(address.getBitSet().get(startIndex, startIndex + pageTableSize));
         }
 
         return pageTableEntryId;

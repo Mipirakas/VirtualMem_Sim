@@ -1,6 +1,6 @@
 package be.virtualmem.logic.process.memory.entry;
 
-import be.virtualmem.logic.process.memory.IPageTable;
+import be.virtualmem.logic.process.memory.table.IPageTable;
 
 public class PageDirectoryEntry implements IPageEntry {
     private byte present;

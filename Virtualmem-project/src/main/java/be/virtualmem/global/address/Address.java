@@ -14,14 +14,25 @@ public class Address implements IAddress {
         return bitSet;
     }
 
-    public static Integer fromBitSetToInteger(BitSet bitSet) {
-        return new BigInteger(bitSet.toByteArray()).intValue();
-    }
-
-    public static Address fromHexToBitSet(String hex) {
+    public static Address fromHexToAddress(String hex) {
         String hexString = hex.substring(2); // remove 0x
         long value = Long.parseUnsignedLong(hexString, 16);
 
         return new Address(BitSet.valueOf(new long[]{value}));
     }
+
+    public static BigInteger fromBitSetToBigInteger(BitSet bitSet) {
+        return new BigInteger(1, bitSet.toByteArray());
+    }
+
+    public static Address fromBigIntegerToAddress(BigInteger value) {
+        return new Address(BitSet.valueOf(value.toByteArray()));
+    }
+
+    public static Address offsetAddress(IAddress address, int offset) {
+        BigInteger addrValue = fromBitSetToBigInteger(address.getBitSet());
+        BigInteger newValue = addrValue.add(BigInteger.valueOf(offset));
+        return fromBigIntegerToAddress(newValue);
+    }
+
 }

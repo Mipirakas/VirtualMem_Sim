@@ -1,0 +1,49 @@
+package be.virtualmem.logic.process.memory.table;
+
+import be.virtualmem.global.Constants;
+import be.virtualmem.logic.process.memory.entry.IPageEntry;
+
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+public class PageTable implements IPageTable {
+    private Map<Integer, IPageEntry> entries;
+    private int level;
+    private int pageTableSize;
+
+    public PageTable(int level, Supplier<IPageEntry> pageEntrySupplier) {
+        entries = new HashMap<>();
+        this.level = level;
+        pageTableSize = (int) Math.pow(2, Constants.PAGE_TABLE_ENTRIES[level]);
+
+        for (int i = 0; i < pageTableSize; i++) {
+            entries.put(i, pageEntrySupplier.get());
+        }
+    }
+
+    public IPageEntry getEntry(BigInteger id) {
+        BigInteger upperBound = BigInteger.valueOf(2).pow(Constants.PAGE_TABLE_ENTRIES[level]);
+
+        if (id.compareTo(BigInteger.ZERO) > 0 && id.compareTo(upperBound) < 0) {
+            return entries.get(id);
+        }
+        return null;
+    }
+
+    public boolean isEmpty() {
+        for (Map.Entry<Integer, IPageEntry> entry : entries.entrySet()) {
+            if (entry.getValue() != null)
+                return false;
+        }
+        return true;
+    }
+
+    public void removeEntries() {
+        for (Map.Entry<Integer, IPageEntry> entry : entries.entrySet()) {
+            entry.setValue(null);
+        }
+    }
+
+}
