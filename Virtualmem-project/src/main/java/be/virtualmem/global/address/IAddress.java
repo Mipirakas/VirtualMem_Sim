@@ -1,5 +1,7 @@
 package be.virtualmem.global.address;
 
-public interface IAddress {
+import java.util.BitSet;
 
+public interface IAddress {
+    BitSet getBitSet();
 }

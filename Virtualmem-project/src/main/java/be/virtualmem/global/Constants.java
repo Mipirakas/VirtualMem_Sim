@@ -1,8 +1,11 @@
 package be.virtualmem.global;
 
 public class Constants {
-    public static final int PAGE_TABLE_LEVEL = 4;
     public static final int[] PAGE_TABLE_ENTRIES = new int[]{9, 9, 9, 9}; // 2^9, 2^9, 2^9, 2^9
+    public static final int ADDRESS_OFFSET_BITS = 12;
+    public static final int ADDRESS_UNUSED_BITS = 16;
+    public static final int BIT_ADDRESSABLE = 64;
+
     public static final int PAGE_SIZE = 12; // 2^12 bytes
     public static final int FRAME_SIZE = 12;
     public static final int FRAMES_IN_RAM = 16;

@@ -1,5 +1,6 @@
 package be.virtualmem.global.address;
 
+import java.math.BigInteger;
 import java.util.BitSet;
 
 public class Address implements IAddress {
@@ -7,6 +8,14 @@ public class Address implements IAddress {
 
     public Address(BitSet bitSet) {
         this.bitSet = bitSet;
+    }
+
+    public BitSet getBitSet() {
+        return bitSet;
+    }
+
+    public static BigInteger fromBitSetToBigInteger(BitSet bitSet) {
+        return new BigInteger(bitSet.toByteArray());
     }
 
     public static Address fromHexToBitSet(String hex) {

@@ -12,7 +12,7 @@ public class ProcessMemory {
     private Map<Integer, Page> pages;
 
     public ProcessMemory() {
-        pageTableStructure = new PageTableStructure(Constants.PAGE_TABLE_LEVEL);
+        pageTableStructure = new PageTableStructure(Constants.PAGE_TABLE_ENTRIES.length);
         pages = new HashMap<>();
         // Create memory
     }

@@ -1,15 +1,17 @@
 package be.virtualmem.logic.process.memory.entry;
 
+import be.virtualmem.logic.process.memory.IPageTable;
+
 public class PageDirectoryEntry implements IPageEntry {
     private byte present;
-    private IPageEntry pointer;
+    private IPageTable pointer;
 
-    public PageDirectoryEntry(IPageEntry pointer) {
+    public PageDirectoryEntry(IPageTable pointer) {
         this.present = pointer == null ? (byte) 0 : (byte) 1;
         this.pointer = pointer;
     }
 
-    public void setPointer(IPageEntry pointer) {
+    public void setPointer(IPageTable pointer) {
         this.pointer = pointer;
         present = pointer == null ? (byte) 0 : (byte) 1;
     }
@@ -19,7 +21,7 @@ public class PageDirectoryEntry implements IPageEntry {
         this.present = (byte) 0;
     }
 
-    public IPageEntry getPointer() {
+    public IPageTable getPointer() {
         return pointer;
     }
 
