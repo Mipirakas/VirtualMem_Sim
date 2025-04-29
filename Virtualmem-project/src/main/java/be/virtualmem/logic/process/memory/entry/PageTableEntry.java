@@ -27,13 +27,13 @@ public class PageTableEntry implements IPageEntry {
 
     // Make custom exceptions: segmentation fault exceptions
     public void read() throws Exception {
-        if (accessible == 0)
+        if (accessible == 0 || present == 0)
             throw new Exception("Segmentation fault: this page is not accessible");
         accessed = 1;
     }
 
     public void write() throws Exception {
-        if (accessible == 0)
+        if (accessible == 0 || present == 0)
             throw new Exception("Segmentation fault: this page is not accessible");
         accessed = 1;
         dirty = 1;

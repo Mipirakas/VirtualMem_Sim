@@ -23,6 +23,7 @@ public class ProcessMemory {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         if (pageTableEntry != null) {
             try {
+                // First check if in present, else swap and then read
                 pageTableEntry.read();
             } catch (Exception e) { // Make custom exception
                 e.printStackTrace();
@@ -44,10 +45,11 @@ public class ProcessMemory {
     }
 
     public void map(IAddress address, int size) {
-
+        pageTableStructure.mapPageTables(address, size);
     }
 
     public void unmap(IAddress address, int size) {
+        pageTableStructure.unmapPageTables(address, size);
 
     }
 

@@ -7,30 +7,23 @@ import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTable;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class PageTableStructure {
-    private Map<Integer, ArrayList<IPageTable>> pageTableStructure; // <PageTableLevel, ListWithPageTables>
+    private PageTable baseTable;
+    private int levels;
 
     public PageTableStructure(int levels) {
-        pageTableStructure = new HashMap<>();
-        for (int i = 0; i < levels; i++) {
-            pageTableStructure.put(i, new ArrayList<>());
-        }
-        pageTableStructure.get(0).add(new PageTable(0, PageDirectoryEntry::new));
+        // Create initial page table for a process
+        baseTable = new PageTable(0, PageDirectoryEntry::new);
+        this.levels = levels;
     }
 
     public PageTableEntry getPageTableEntry(IAddress address) {
         // Recursively look in Page Table Directories until Page Table Entry is found
-        IPageTable pageTable = pageTableStructure.get(0).get(0);
+        IPageTable pageTable = baseTable;
         PageTableEntry pageTableEntry = null;
 
-        for (Map.Entry<Integer, ArrayList<IPageTable>> entry : pageTableStructure.entrySet()) {
-            Integer pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, entry.getKey());
+        for (int i = 0; i < levels; i++) {
+            Integer pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
 
             if (pageTableOffset != null) {
                 IPageEntry pageEntry = pageTable.getEntry(pageTableOffset);
@@ -45,7 +38,11 @@ public class PageTableStructure {
         return pageTableEntry;
     }
 
-    public void addPageTableEntry(PageTableEntry entry) {
+    public void mapPageTables(IAddress address, int size) {
+        // Also create necessary Page Table Directories
+    }
+
+    public void unmapPageTables(IAddress address, int size) {
         // Also create necessary Page Table Directories
     }
 
