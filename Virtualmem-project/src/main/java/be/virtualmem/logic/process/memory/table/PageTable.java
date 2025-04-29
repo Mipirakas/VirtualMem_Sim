@@ -23,10 +23,8 @@ public class PageTable implements IPageTable {
         }
     }
 
-    public IPageEntry getEntry(BigInteger id) {
-        BigInteger upperBound = BigInteger.valueOf(2).pow(Constants.PAGE_TABLE_ENTRIES[level]);
-
-        if (id.compareTo(BigInteger.ZERO) > 0 && id.compareTo(upperBound) < 0) {
+    public IPageEntry getEntry(Integer id) {
+        if (id > 0 && id < pageTableSize) {
             return entries.get(id);
         }
         return null;

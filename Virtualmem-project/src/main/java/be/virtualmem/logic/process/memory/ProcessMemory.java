@@ -52,7 +52,7 @@ public class ProcessMemory {
 
     public void map(IAddress address, int size) {
         List<Page> pagesToAdd = new ArrayList<>();
-        int requiredPages = size / Constants.PAGE_SIZE;
+        int requiredPages = size / (int) Math.pow(2, Constants.PAGE_SIZE);
 
         for (int i = 0; i < requiredPages; i++) {
             IAddress addressToAdd = Address.offsetAddress(address, i * Constants.PAGE_SIZE);
@@ -62,6 +62,7 @@ public class ProcessMemory {
         pageTableStructure.mapPageTables(pagesToAdd);
 
         // Add newly mapped pages to the map
+        // Test: ((PageDirectoryEntry) pageTableStructure.baseTable.getEntry(337)).pointer.getEntry(298)
         pages.putAll(pagesToAdd.stream().collect(Collectors.toMap(Page::getAddress, Function.identity())));
     }
 

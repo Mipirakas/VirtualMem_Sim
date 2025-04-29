@@ -3,10 +3,8 @@ package be.virtualmem.logic.process.memory.table;
 
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 
-import java.math.BigInteger;
-
 public interface IPageTable {
-    IPageEntry getEntry(BigInteger id);
+    IPageEntry getEntry(Integer id);
     void removeEntries();
     boolean isEmpty();
 }
