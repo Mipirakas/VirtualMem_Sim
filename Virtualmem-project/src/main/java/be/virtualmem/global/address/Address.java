@@ -21,18 +21,9 @@ public class Address implements IAddress {
         return new Address(BitSet.valueOf(new long[]{value}));
     }
 
-    public static BigInteger fromBitSetToBigInteger(BitSet bitSet) {
-        return new BigInteger(1, bitSet.toByteArray());
-    }
-
-    public static Address fromBigIntegerToAddress(BigInteger value) {
-        return new Address(BitSet.valueOf(value.toByteArray()));
-    }
-
     public static Address offsetAddress(IAddress address, int offset) {
-        BigInteger addrValue = fromBitSetToBigInteger(address.getBitSet());
-        BigInteger newValue = addrValue.add(BigInteger.valueOf(offset));
-        return fromBigIntegerToAddress(newValue);
+
+        return Address.fromHexToAddress("0x0");
     }
 
 }
