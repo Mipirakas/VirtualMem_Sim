@@ -3,7 +3,6 @@ package be.virtualmem.logic.process.memory.table;
 import be.virtualmem.global.Constants;
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -23,7 +22,7 @@ public class PageTable implements IPageTable {
         }
     }
 
-    public IPageEntry getEntry(Integer id) {
+    public IPageEntry getEntry(Long id) {
         if (id > 0 && id < pageTableSize) {
             return entries.get(id);
         }

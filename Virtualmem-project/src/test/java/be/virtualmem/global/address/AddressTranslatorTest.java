@@ -8,9 +8,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressTranslatorTest {
+    IAddress address;
+
     @BeforeEach
     void setUp() {
-
+        String hexAddress = "0xa8caa15ca000";
+        address = Address.fromHexToAddress(hexAddress);
     }
 
     @AfterEach
@@ -19,9 +22,6 @@ class AddressTranslatorTest {
 
     @Test
     void fromAddressToPageTableLevelEntryId() {
-        String hexAddress = "0xa8caa15ca000";
-        IAddress address = Address.fromHexToAddress(hexAddress);
-
         // Hex to separate levels
         int levelZeroOffset = 337; // 101010001
         int levelOneOffset = 298; // 100101010

@@ -5,23 +5,17 @@ import be.virtualmem.global.Constants;
 import java.util.Arrays;
 
 public class AddressTranslator {
-    public static Integer fromAddressToPageTableLevelEntryId(IAddress address, int level) {
-        Integer pageTableEntryId = null;
-        if (level <= Constants.PAGE_TABLE_ENTRIES.length) {
-            int pageTableSize = Constants.PAGE_TABLE_ENTRIES[level];
+    public static Long fromAddressToPageTableLevelEntryId(IAddress address, int level) {
+        Long pageTableEntryId = null;
+        if (level >= 0 && level < Constants.PAGE_TABLE_ENTRIES.length) {
+            final int pageTableSize = Constants.PAGE_TABLE_ENTRIES[level];
             int startIndex = Constants.ADDRESS_OFFSET_BITS;
 
             for (int i = level + 1; i < Constants.PAGE_TABLE_ENTRIES.length; i++)
                 startIndex += Constants.PAGE_TABLE_ENTRIES[i];
 
-            // Make custom bit class, problems with little endian and big endian for conversion
-            /*BitSet set = address.getBitSet().get(startIndex, startIndex + pageTableSize);
-            int offset = 0;
-            for (int i = 0; i < pageTableSize; i++)
-                if (set.get(i))
-                    offset += (int) Math.pow(2, i);
-            pageTableEntryId = offset;
-             */
+            final int finalIndex = startIndex;
+            pageTableEntryId = ((Address) address).getSubAddress(finalIndex, finalIndex + pageTableSize).getAsInteger(); // Maybe create custom method
         }
 
         return pageTableEntryId;

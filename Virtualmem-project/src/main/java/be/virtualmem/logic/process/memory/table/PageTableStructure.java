@@ -26,7 +26,7 @@ public class PageTableStructure {
         PageTableEntry pageTableEntry = null;
 
         for (int i = 0; i < levels; i++) {
-            Integer pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+            Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
 
             if (pageTableOffset != null && pageTable != null) {
                 IPageEntry pageEntry = pageTable.getEntry(pageTableOffset);
@@ -48,7 +48,7 @@ public class PageTableStructure {
 
             // Map page per page (can be done more efficiently)
             for (int i = 0; i < levels; i++) {
-                Integer pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
+                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
                 PageDirectoryEntry pageDirectoryEntry = null;
 
                 if (pageTableOffset != null) {
@@ -80,7 +80,7 @@ public class PageTableStructure {
 
 
             for (int i = 0; i < levels; i++) {
-                Integer pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
+                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
 
                 if (pageTableOffset != null) {
                     IPageEntry pageEntry = tables[i].getEntry(pageTableOffset);

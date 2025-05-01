@@ -26,7 +26,6 @@ class AddressTest {
 
     @Test
     void fromHexToAddress() {
-        System.out.println("fromHexToAddress");
         String hex = "0x2e"; // 46 in hex
 
         Address address = Address.fromHexToAddress(hex);
@@ -35,7 +34,6 @@ class AddressTest {
 
     @Test
     void offsetAddress() {
-        System.out.println("offsetAddress");
         int offset = 23; // 46 + 23 = 69
 
         Address address = Address.offsetAddress(address46, offset);
@@ -44,18 +42,20 @@ class AddressTest {
 
     @Test
     void getBits() {
-        System.out.println("getBits");
-
         Assertions.assertEquals(Set.of(1, 2, 3, 5), address46.getBits());
         Assertions.assertEquals(Set.of(0, 2, 6), address69.getBits());
     }
 
     @Test
-    void getAsInteger() {
+    void getSubAddress() {
+        Address address = new Address(Set.of(0, 2));
+
+        Assertions.assertEquals(address, address46.getSubAddress(3, 6));
+        Assertions.assertEquals(address, address69.getSubAddress(0, 3));
     }
 
     @Test
-    void testFromHexToAddress() {
+    void getAsInteger() {
     }
 
     @Test
@@ -64,9 +64,5 @@ class AddressTest {
 
     @Test
     void fromDecimalToAddress() {
-    }
-
-    @Test
-    void testOffsetAddress() {
     }
 }
