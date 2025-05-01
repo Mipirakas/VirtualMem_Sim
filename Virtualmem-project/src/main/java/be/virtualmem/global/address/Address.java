@@ -18,9 +18,13 @@ public class Address implements IAddress {
 
     // Getters
     public Long getAsInteger() {
-        return (long) bits.stream()
-                .mapToInt(e -> (int) Math.pow(2, e))
+        return bits.stream()
+                .mapToLong(e -> 1L << e)
                 .sum();
+    }
+
+    public String getAsHex() {
+        return Long.toHexString(getAsInteger()).toUpperCase();
     }
 
     public Address getSubAddress(int from, int to) {
@@ -75,6 +79,6 @@ public class Address implements IAddress {
 
     @Override
     public String toString() {
-        return "Decimal notation: " + getAsInteger();
+        return "Decimal: " + getAsInteger() + " [==] Hex: 0x" + getAsHex();
      }
 }

@@ -56,6 +56,13 @@ class AddressTest {
 
     @Test
     void getAsInteger() {
+        String hex = "0xa8caa161dd3b";
+
+        Address address = Address.fromHexToAddress(hex);
+        long addressDecimal = address.getAsInteger();
+        Address address1 = Address.fromDecimalToAddress(addressDecimal);
+
+        Assertions.assertEquals(address, address1);
     }
 
     @Test

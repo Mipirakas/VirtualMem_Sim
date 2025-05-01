@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class PageTable implements IPageTable {
-    private Map<Integer, IPageEntry> entries;
+    private Map<Long, IPageEntry> entries;
     private int level;
     private int pageTableSize;
 
@@ -18,7 +18,7 @@ public class PageTable implements IPageTable {
         pageTableSize = (int) Math.pow(2, Constants.PAGE_TABLE_ENTRIES[level]);
 
         for (int i = 0; i < pageTableSize; i++) {
-            entries.put(i, pageEntrySupplier.get());
+            entries.put((long) i, pageEntrySupplier.get());
         }
     }
 
@@ -30,7 +30,7 @@ public class PageTable implements IPageTable {
     }
 
     public boolean isEmpty() {
-        for (Map.Entry<Integer, IPageEntry> entry : entries.entrySet()) {
+        for (Map.Entry<Long, IPageEntry> entry : entries.entrySet()) {
             if (entry.getValue() != null)
                 return false;
         }
@@ -38,7 +38,7 @@ public class PageTable implements IPageTable {
     }
 
     public void removeEntries() {
-        for (Map.Entry<Integer, IPageEntry> entry : entries.entrySet()) {
+        for (Map.Entry<Long, IPageEntry> entry : entries.entrySet()) {
             entry.setValue(null);
         }
     }
