@@ -6,8 +6,6 @@ import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
-
-import java.math.BigInteger;
 import java.util.List;
 
 public class PageTableStructure {
@@ -47,7 +45,9 @@ public class PageTableStructure {
             IPageTable pageTable = baseTable;
 
             // Map page per page (can be done more efficiently)
-            for (int i = 0; i < levels; i++) {
+            // 1 because base table is counted as the first level
+            // Rethink method of page tables
+            for (int i = 0; i < levels - 1; i++) {
                 Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
                 PageDirectoryEntry pageDirectoryEntry = null;
 
@@ -63,7 +63,7 @@ public class PageTableStructure {
                 // If page table does not exist, create one
                 if (pageTable == null && pageDirectoryEntry != null) {
                     // If the page table is the last level, it should use page table entries and not page directory entries
-                    PageTable pageTableToAdd = new PageTable(i, i == levels - 1 ? PageTableEntry::new : PageDirectoryEntry::new);
+                    PageTable pageTableToAdd = new PageTable(i, i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
                     pageTable = pageTableToAdd;
                     pageDirectoryEntry.setPointer(pageTableToAdd);
                 }
@@ -114,5 +114,7 @@ public class PageTableStructure {
         return null;
     }
 
-
+    public PageTable getBaseTable() {
+        return baseTable;
+    }
 }

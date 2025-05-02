@@ -21,6 +21,14 @@ public class AddressTranslator {
         return pageTableEntryId;
     }
 
+    public static Long fromAddressGetPhysicalAddressOffset(IAddress address) {
+        Long offset = null;
+        if (address instanceof Address) {
+            offset = ((Address) address).getSubAddress(0, Constants.ADDRESS_UNUSED_BITS).getAsInteger();
+        }
+        return offset;
+    }
+
     public static boolean validateConstants() {
         // All bits used for page table, offset and unused bits should add up to size of bit addressable
         return Constants.BIT_ADDRESSABLE == Arrays.stream(Constants.PAGE_TABLE_ENTRIES).sum() + Constants.ADDRESS_OFFSET_BITS + Constants.ADDRESS_UNUSED_BITS;
