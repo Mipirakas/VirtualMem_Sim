@@ -29,6 +29,14 @@ public class PageTable implements IPageTable {
         return null;
     }
 
+    public void removeEntry(Long id) {
+        entries.remove(id);
+    }
+
+    public int getNrOfEntries() {
+        return entries.size();
+    }
+
     public boolean isEmpty() {
         for (Map.Entry<Long, IPageEntry> entry : entries.entrySet()) {
             if (entry.getValue() != null)

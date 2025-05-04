@@ -1,12 +1,14 @@
 package be.virtualmem.logic.process.memory.table;
 
+import be.virtualmem.global.address.Address;
 import be.virtualmem.global.address.AddressTranslator;
 import be.virtualmem.global.address.IAddress;
 import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
-import java.util.List;
+
+import java.util.*;
 
 public class PageTableStructure {
     private PageTable baseTable;
@@ -69,41 +71,41 @@ public class PageTableStructure {
                 }
             }
         }
-
     }
 
     public void unmapPageTables(List<Page> list) {
+        PageTable pageTable;
+
+        // First, remove all the PTEs on the lowest levels (the last tables)
         for (Page page : list) {
-            IPageTable[] tables = new IPageTable[levels];
-            PageDirectoryEntry[] entries = new PageDirectoryEntry[levels];
-            tables[0] = baseTable;
-
-
+            Address address = (Address) page.getAddress();
+            pageTable = baseTable;
             for (int i = 0; i < levels; i++) {
-                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
-
-                if (pageTableOffset != null) {
-                    IPageEntry pageEntry = tables[i].getEntry(pageTableOffset);
-
-                    if (pageEntry instanceof PageDirectoryEntry) {
-                        // +1 should not be a problem since the pageEntry of the last table is not and instance of
-                        // PageDirectoryEntry but of PageTableEntry
-                        tables[i + 1] = ((PageDirectoryEntry) pageEntry).getPointer();
-                        entries[i] = (PageDirectoryEntry) pageEntry;
-                    }
+                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+                if (i < levels - 1) {
+                    pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
+                } else {
+                    pageTable.removeEntry(pageTableOffset);
                 }
             }
+        }
 
-            for (int i = levels - 1; i >= 0; i--) {
-                IPageTable pageTable = tables[i];
-                PageDirectoryEntry pageEntry = entries[i];
-
-                if (pageTable != null && i == levels - 1) {
-                    pageTable.removeEntries();
-                    pageEntry.clearPointer();
-                } else if (pageTable != null) {
-                    if (pageTable.isEmpty())
-                        pageEntry.clearPointer();
+        // Next, go from the second-lowest level to the highest level and check on each level
+        // if the page table below it is empty and remove it accordingly
+        for (int j = levels - 1; j >= 0; j--) {
+            for (Page page : list) {
+                Address address = (Address) page.getAddress();
+                pageTable = baseTable;
+                for (int i = 0; i < j; i++) {
+                    Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+                    if (i < j - 1) {
+                        pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
+                    } else {
+                        PageTable pt = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
+                        if (pt.getNrOfEntries() == 0) {
+                            pageTable.removeEntry(pageTableOffset);
+                        }
+                    }
                 }
             }
         }

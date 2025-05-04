@@ -68,10 +68,10 @@ public class ProcessMemory {
 
     public void unmap(IAddress address, int size) {
         List<Page> pagesToRemove = new ArrayList<>();
-        int requiredPages = size / Constants.PAGE_SIZE;
+        int requiredPages = size / (int) Math.pow(2, Constants.PAGE_SIZE);
 
         for (int i = 0; i < requiredPages; i++) {
-            IAddress addressToRemove = Address.offsetAddress(address, i * Constants.PAGE_SIZE);
+            IAddress addressToRemove = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));
             if (pages.get(addressToRemove) != null)
                 pagesToRemove.add(pages.get(addressToRemove));
             // Remove mapped pages to the map
