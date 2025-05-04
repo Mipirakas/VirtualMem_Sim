@@ -35,8 +35,6 @@ class PageTableStructureTest {
         pageList.add(page);
 
         pageTableStructure.mapPageTables(pageList);
-        PageTable pageTable = pageTableStructure.getBaseTable();
-
         PageTableEntry entry = pageTableStructure.getPageTableEntry(address);
 
         Assertions.assertNotNull(entry);
@@ -44,6 +42,19 @@ class PageTableStructureTest {
 
     @Test
     void unmapPageTables() {
+        Page page = new Page(address, 12);
+        List<Page> pageList = new ArrayList<>();
+        pageList.add(page);
+
+        pageTableStructure.mapPageTables(pageList);
+        PageTableEntry entry1 = pageTableStructure.getPageTableEntry(address);
+
+        Assertions.assertNotNull(entry1);
+
+        pageTableStructure.unmapPageTables(pageList);
+        PageTableEntry entry2 = pageTableStructure.getPageTableEntry(address);
+
+        Assertions.assertNull(entry2);
     }
 
     @Test
