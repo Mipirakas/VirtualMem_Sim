@@ -55,7 +55,7 @@ public class ProcessMemory {
         int requiredPages = size / (int) Math.pow(2, Constants.PAGE_SIZE);
 
         for (int i = 0; i < requiredPages; i++) {
-            IAddress addressToAdd = Address.offsetAddress(address, i * Constants.PAGE_SIZE);
+            IAddress addressToAdd = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));
             pagesToAdd.add(new Page(addressToAdd, Constants.PAGE_SIZE));
         }
 

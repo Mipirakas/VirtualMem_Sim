@@ -24,7 +24,7 @@ public class AddressTranslator {
     public static Long fromAddressGetPhysicalAddressOffset(IAddress address) {
         Long offset = null;
         if (address instanceof Address) {
-            offset = ((Address) address).getSubAddress(0, Constants.ADDRESS_UNUSED_BITS).getAsInteger();
+            offset = ((Address) address).getSubAddress(0, Constants.ADDRESS_OFFSET_BITS).getAsInteger();
         }
         return offset;
     }
