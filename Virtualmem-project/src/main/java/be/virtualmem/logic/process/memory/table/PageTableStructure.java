@@ -77,22 +77,9 @@ public class PageTableStructure {
         PageTable pageTable;
 
         // First, remove all the PTEs on the lowest levels (the last tables)
-        for (Page page : list) {
-            Address address = (Address) page.getAddress();
-            pageTable = baseTable;
-            for (int i = 0; i < levels; i++) {
-                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
-                if (i < levels - 1) {
-                    pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
-                } else {
-                    pageTable.removeEntry(pageTableOffset);
-                }
-            }
-        }
-
         // Next, go from the second-lowest level to the highest level and check on each level
         // if the page table below it is empty and remove it accordingly
-        for (int j = levels - 1; j >= 0; j--) {
+        for (int j = levels; j > 0; j--) {
             for (Page page : list) {
                 Address address = (Address) page.getAddress();
                 pageTable = baseTable;
@@ -101,9 +88,13 @@ public class PageTableStructure {
                     if (i < j - 1) {
                         pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
                     } else {
-                        PageTable pt = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
-                        if (pt.getNrOfEntries() == 0) {
+                        if (i == levels - 1) {
                             pageTable.removeEntry(pageTableOffset);
+                        } else {
+                            PageTable pt = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
+                            if (pt.getNrOfEntries() == 0) {
+                                pageTable.removeEntry(pageTableOffset);
+                            }
                         }
                     }
                 }
