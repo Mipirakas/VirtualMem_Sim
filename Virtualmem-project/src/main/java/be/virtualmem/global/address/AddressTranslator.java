@@ -14,8 +14,7 @@ public class AddressTranslator {
             for (int i = level + 1; i < Constants.PAGE_TABLE_ENTRIES.length; i++)
                 startIndex += Constants.PAGE_TABLE_ENTRIES[i];
 
-            final int finalIndex = startIndex;
-            pageTableEntryId = ((Address) address).getSubAddress(finalIndex, finalIndex + pageTableSize).getAsInteger(); // Maybe create custom method
+            pageTableEntryId = ((Address) address).getSubAddress(startIndex, startIndex + pageTableSize).getAsInteger(); // Maybe create custom method
         }
 
         return pageTableEntryId;

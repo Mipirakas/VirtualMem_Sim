@@ -63,7 +63,7 @@ public class PageTableStructure {
                 // If page table does not exist, create one
                 if (pageTable == null && pageDirectoryEntry != null) {
                     // If the page table is the last level, it should use page table entries and not page directory entries
-                    PageTable pageTableToAdd = new PageTable(i, i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
+                    PageTable pageTableToAdd = new PageTable(i + 1, i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
                     pageTable = pageTableToAdd;
                     pageDirectoryEntry.setPointer(pageTableToAdd);
                 }
