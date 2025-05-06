@@ -1,5 +1,8 @@
 package be.virtualmem.global.address;
 
-public interface IAddress {
+import java.util.LinkedHashSet;
 
+public interface IAddress {
+    Long getAsInteger();
+    LinkedHashSet<Integer> getBits();
 }

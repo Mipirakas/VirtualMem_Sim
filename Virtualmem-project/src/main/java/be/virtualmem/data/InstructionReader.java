@@ -22,10 +22,10 @@ public class InstructionReader {
                 instruction = switch (parts[1]) {
                     case "START" -> new Start(pid);
                     case "END" -> new End(pid);
-                    case "MAP" -> new Map(pid, Address.fromHexToBitSet(parts[2]), Integer.parseInt(parts[3]));
-                    case "UNMAP" -> new Unmap(pid, Address.fromHexToBitSet(parts[2]), Integer.parseInt(parts[3]));
-                    case "READ" -> new Read(pid, Address.fromHexToBitSet(parts[2]));
-                    case "WRITE" -> new Write(pid, Address.fromHexToBitSet(parts[2]));
+                    case "MAP" -> new Map(pid, Address.fromHexToAddress(parts[2]), Integer.parseInt(parts[3]));
+                    case "UNMAP" -> new Unmap(pid, Address.fromHexToAddress(parts[2]), Integer.parseInt(parts[3]));
+                    case "READ" -> new Read(pid, Address.fromHexToAddress(parts[2]));
+                    case "WRITE" -> new Write(pid, Address.fromHexToAddress(parts[2]));
                     default -> throw new IOException("Unknown Instruction: " + parts[1]);
                 };
 

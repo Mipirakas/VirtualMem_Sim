@@ -16,7 +16,7 @@ public class ProcessManager implements IProcessManager {
 
     @Override
     public IProcess getProcess(int pid) {
-        return null;
+        return processes.get(pid);
     }
 
     @Override
