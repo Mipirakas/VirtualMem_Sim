@@ -1,6 +1,11 @@
 package be.virtualmem.presentation.tui;
 
+import be.virtualmem.logic.process.memory.Frame;
+import be.virtualmem.logic.process.memory.PhysicalMemory;
+
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Navigator {
     private be.virtualmem.logic.System system;
@@ -32,10 +37,11 @@ public class Navigator {
                 switch (selection) {
                     case 1: runNextInstruction(); break;
                     case 2: runNextXInstruction(); break;
+                    case 3: showPhysicalMemory(); break;
                     default: System.out.println("Invalid selection. Try again."); break;
                 }
             } catch (Exception exception) {
-                System.out.println(exception.getMessage());
+                exception.printStackTrace();
             }
         }
     }
@@ -69,6 +75,14 @@ public class Navigator {
     }
 
     private void showPhysicalMemory() {
-        //String printable = PrettyPrinter.tablePrinter();
+        Map<Integer, IPrintTUI> typedMap = PhysicalMemory.getInstance().getFrames().entrySet()
+                .stream()
+                .filter(e -> e.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
+        String printable = PrettyPrinter.tablePrinter("Physical Memory", 6, "Index",15, "Frame", typedMap);
+        System.out.println(printable);
     }
 }
