@@ -83,17 +83,21 @@ public class PageTableStructure {
             for (Page page : list) {
                 Address address = (Address) page.getAddress();
                 pageTable = baseTable;
+
                 for (int i = 0; i < j; i++) {
                     Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+
                     if (i < j - 1) {
                         pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
                     } else {
                         if (i == levels - 1) {
                             pageTable.removeEntry(pageTableOffset);
                         } else {
-                            PageTable pt = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
-                            if (pt.getNrOfEntries() == 0) {
-                                pageTable.removeEntry(pageTableOffset);
+                            PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableOffset);
+                            PageTable pt = (PageTable) pde.getPointer();
+
+                            if (pt != null && pt.getNrOfEntries() == 0) {
+                                pde.clearPointer();
                             }
                         }
                     }
