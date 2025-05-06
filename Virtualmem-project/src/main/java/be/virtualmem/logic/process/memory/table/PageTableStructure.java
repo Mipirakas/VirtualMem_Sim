@@ -49,11 +49,12 @@ public class PageTableStructure {
             // Map page per page (can be done more efficiently)
             // 1 because base table is counted as the first level
             // Rethink method of page tables
-            for (int i = 0; i < levels - 1; i++) {
+            for (int i = 0; i < levels; i++) {
                 Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
                 PageDirectoryEntry pageDirectoryEntry = null;
 
                 if (pageTableOffset != null) {
+                    pageTable.addEntry(pageTableOffset);
                     IPageEntry pageEntry = pageTable.getEntry(pageTableOffset);
 
                     if (pageEntry instanceof PageDirectoryEntry) {
@@ -91,13 +92,17 @@ public class PageTableStructure {
                         pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
                     } else {
                         if (i == levels - 1) {
+                            // TODO: If pfn is set, Possibly need to add the frame to the free pool
                             pageTable.removeEntry(pageTableOffset);
                         } else {
                             PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableOffset);
-                            PageTable pt = (PageTable) pde.getPointer();
 
-                            if (pt != null && pt.getNrOfEntries() == 0) {
-                                pde.clearPointer();
+                            if (pde != null) {
+                                PageTable pt = (PageTable) pde.getPointer();
+
+                                if (pt != null && pt.getNrOfEntries() == 0) {
+                                    pageTable.removeEntry(pageTableOffset);
+                                }
                             }
                         }
                     }

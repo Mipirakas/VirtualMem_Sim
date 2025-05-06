@@ -5,6 +5,7 @@ import be.virtualmem.logic.process.memory.entry.IPageEntry;
 
 public interface IPageTable {
     IPageEntry getEntry(Long id);
+    void addEntry(Long id);
     void removeEntries();
     boolean isEmpty();
 }

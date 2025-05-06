@@ -11,15 +11,13 @@ public class PageTable implements IPageTable {
     private Map<Long, IPageEntry> entries;
     private int level;
     private int pageTableSize;
+    private Supplier<IPageEntry> pageEntrySupplier;
 
     public PageTable(int level, Supplier<IPageEntry> pageEntrySupplier) {
         entries = new HashMap<>();
         this.level = level;
         pageTableSize = (int) Math.pow(2, Constants.PAGE_TABLE_ENTRIES[level]);
-
-        for (int i = 0; i < pageTableSize; i++) {
-            entries.put((long) i, pageEntrySupplier.get());
-        }
+        this.pageEntrySupplier = pageEntrySupplier;
     }
 
     public IPageEntry getEntry(Long id) {
@@ -27,6 +25,11 @@ public class PageTable implements IPageTable {
             return entries.get(id);
         }
         return null;
+    }
+
+    public void addEntry(Long id) {
+        if (!entries.containsKey(id) || entries.get(id) == null)
+            entries.put(id, pageEntrySupplier.get());
     }
 
     public void removeEntry(Long id) {
