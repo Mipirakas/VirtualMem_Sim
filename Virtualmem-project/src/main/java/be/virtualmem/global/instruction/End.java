@@ -13,4 +13,9 @@ public class End implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.endProcess(pid);
     }
+
+    @Override
+    public String print() {
+        return "[END] Process " + pid;
+    }
 }

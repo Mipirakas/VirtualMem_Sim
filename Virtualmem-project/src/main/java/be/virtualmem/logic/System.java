@@ -21,4 +21,12 @@ public class System implements ISystemContext {
     public void run(){
         instructionManager.executeNextInstruction();
     }
+
+    public InstructionManager getInstructionManager() {
+        return instructionManager;
+    }
+
+    public boolean hasFinished() {
+        return instructionManager.hasFinished();
+    }
 }

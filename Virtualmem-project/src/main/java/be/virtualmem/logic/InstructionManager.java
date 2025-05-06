@@ -20,4 +20,12 @@ public class InstructionManager {
         if (!instructionQueue.isEmpty())
             instructionQueue.poll().execute(processManager);
     }
+
+    public IInstruction getNextInstruction(){
+        return instructionQueue.peek();
+    }
+
+    public boolean hasFinished() {
+        return instructionQueue.isEmpty();
+    }
 }
