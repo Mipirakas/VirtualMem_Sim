@@ -18,4 +18,9 @@ public class Unmap implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.getProcess(pid).getProcessMemory().unmap(address, size);
     }
+
+    @Override
+    public String print() {
+        return "[UNMAP] Process " + pid + " \t| Base address " + address.getAsHex() + " \t| Size " + size;
+    }
 }

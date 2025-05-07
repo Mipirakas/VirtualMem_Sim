@@ -16,4 +16,9 @@ public class Write implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.getProcess(pid).getProcessMemory().write(address);
     }
+
+    @Override
+    public String print() {
+        return "[WRITE] Process " + pid + " \t| Address " + address.getAsHex();
+    }
 }

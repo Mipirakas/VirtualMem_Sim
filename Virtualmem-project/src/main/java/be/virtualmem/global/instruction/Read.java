@@ -16,4 +16,9 @@ public class Read implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.getProcess(pid).getProcessMemory().read(address);
     }
+
+    @Override
+    public String print() {
+        return "[READ] Process " + pid + " \t| Address " + address.getAsHex();
+    }
 }

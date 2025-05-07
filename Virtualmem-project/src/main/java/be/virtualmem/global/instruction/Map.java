@@ -18,4 +18,9 @@ public class Map implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.getProcess(pid).getProcessMemory().map(address, size);
     }
+
+    @Override
+    public String print() {
+        return "[MAP] Process " + pid + " \t| Base address " + address.getAsHex() + " \t| Size " + size;
+    }
 }

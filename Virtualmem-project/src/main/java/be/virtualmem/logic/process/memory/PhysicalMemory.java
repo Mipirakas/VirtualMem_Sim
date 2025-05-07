@@ -29,4 +29,8 @@ public class PhysicalMemory {
         // Return the frame where the page was inserted based on
         return null;
     }
+
+    public Map<Integer, Frame> getFrames() {
+        return frames;
+    }
 }

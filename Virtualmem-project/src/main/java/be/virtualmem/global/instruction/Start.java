@@ -14,4 +14,9 @@ public class Start implements IInstruction {
     public void execute(IProcessManager processManager) {
         processManager.startProcess(this.pid);
     }
+
+    @Override
+    public String print() {
+        return "[START] Process " + pid;
+    }
 }
