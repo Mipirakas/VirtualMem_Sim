@@ -19,6 +19,6 @@ public class Write implements IInstruction {
 
     @Override
     public String print() {
-        return "[WRITE] Process " + pid + " /\\ Address " + address;
+        return "[WRITE] Process " + pid + " \t| Address " + address.getAsHex();
     }
 }

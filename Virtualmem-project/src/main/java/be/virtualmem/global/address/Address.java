@@ -24,7 +24,7 @@ public class Address implements IAddress {
     }
 
     public String getAsHex() {
-        return Long.toHexString(getAsInteger()).toUpperCase();
+        return "0x" + Long.toHexString(getAsInteger()).toUpperCase();
     }
 
     public Address getSubAddress(int from, int to) {
@@ -79,6 +79,6 @@ public class Address implements IAddress {
 
     @Override
     public String toString() {
-        return "Decimal: " + getAsInteger() + " [==] Hex: 0x" + getAsHex();
+        return "Decimal: " + getAsInteger() + " [==] Hex: " + getAsHex();
      }
 }

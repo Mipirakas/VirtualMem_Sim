@@ -19,6 +19,6 @@ public class Read implements IInstruction {
 
     @Override
     public String print() {
-        return "[READ] Process " + pid + " /\\ Address " + address;
+        return "[READ] Process " + pid + " \t| Address " + address.getAsHex();
     }
 }

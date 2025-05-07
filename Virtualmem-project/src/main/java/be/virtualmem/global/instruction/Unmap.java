@@ -21,6 +21,6 @@ public class Unmap implements IInstruction {
 
     @Override
     public String print() {
-        return "[UNMAP] Process " + pid + " /\\ Base address " + address + " /\\ Size " + size;
+        return "[UNMAP] Process " + pid + " \t| Base address " + address.getAsHex() + " \t| Size " + size;
     }
 }

@@ -21,6 +21,6 @@ public class Map implements IInstruction {
 
     @Override
     public String print() {
-        return "[MAP] Process " + pid + " /\\ Base address " + address + " /\\ Size " + size;
+        return "[MAP] Process " + pid + " \t| Base address " + address.getAsHex() + " \t| Size " + size;
     }
 }
