@@ -1,6 +1,8 @@
 package be.virtualmem.presentation.tui;
 
-import be.virtualmem.logic.process.memory.Frame;
+import be.virtualmem.global.instruction.IInstruction;
+import be.virtualmem.global.instruction.Read;
+import be.virtualmem.global.instruction.Write;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
 
 import java.util.Map;
@@ -22,8 +24,12 @@ public class Navigator {
                 3) Show physical memory
                 4) Show backing store
                 5) Show page table entry content
+                6) Show statistics
+                7) Current system clock status
                 0) Exit
                 """;
+        // Statistics contains: The number of page ins, page evictions, and page outs
+        // Current system clock
     }
 
     public void run() {
@@ -32,12 +38,13 @@ public class Navigator {
 
             try {
                 int selection = promptIntegerSelection();
-
                 // Map met alle runnables?
                 switch (selection) {
                     case 1: runNextInstruction(); break;
                     case 2: runNextXInstruction(); break;
                     case 3: showPhysicalMemory(); break;
+
+                    case 0: return;
                     default: System.out.println("Invalid selection. Try again."); break;
                 }
             } catch (Exception exception) {
@@ -52,9 +59,16 @@ public class Navigator {
     }
 
     private void runNextInstruction() {
-        IPrintTUI printable = system.getInstructionManager().getNextInstruction();
-        System.out.println("Next instruction: " + printable.print());
+        IInstruction instruction = system.getInstructionManager().getNextInstruction();
+
+        if (instruction instanceof Read || instruction instanceof Write)
+            printInvolvedAddresses(instruction);
+        System.out.println("Next instruction: " + instruction.print());
         system.run();
+    }
+
+    private void printInvolvedAddresses(IInstruction instruction) {
+        // Print virtual and physical address of this instruction in physical memory
     }
 
     private void runNextXInstruction() {
