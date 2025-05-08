@@ -2,7 +2,6 @@ package be.virtualmem.logic.process.memory.table;
 
 import be.virtualmem.global.address.Address;
 import be.virtualmem.global.address.AddressTranslator;
-import be.virtualmem.global.address.IAddress;
 import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
@@ -20,7 +19,7 @@ public class PageTableStructure {
         this.levels = levels;
     }
 
-    public PageTableEntry getPageTableEntry(IAddress address) {
+    public PageTableEntry getPageTableEntry(Address address) {
         // Recursively look in Page Table Directories until Page Table Entry is found
         IPageTable pageTable = baseTable;
         PageTableEntry pageTableEntry = null;
@@ -82,7 +81,7 @@ public class PageTableStructure {
         // if the page table below it is empty and remove it accordingly
         for (int j = levels; j > 0; j--) {
             for (Page page : list) {
-                Address address = (Address) page.getAddress();
+                Address address = page.getAddress();
                 pageTable = baseTable;
 
                 for (int i = 0; i < j; i++) {
@@ -111,7 +110,7 @@ public class PageTableStructure {
         }
     }
 
-    public IAddress getPhysicalAddress(Page page, IAddress virtualAddress) {
+    public Address getPhysicalAddress(Page page, Address virtualAddress) {
         // Calculate the physical address
         return null;
     }

@@ -5,11 +5,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Address implements IAddress {
+public class Address {
     private LinkedHashSet<Integer> bits;
 
     public Address(Set<Integer> bits) {
         this.bits = new LinkedHashSet<>(bits);
+    }
+
+    public Address(Address address) {
+        this.bits = new LinkedHashSet<>(address.getBits());
     }
 
     public LinkedHashSet<Integer> getBits() {
@@ -27,10 +31,10 @@ public class Address implements IAddress {
         return "0x" + Long.toHexString(getAsInteger()).toUpperCase();
     }
 
-    public Address getSubAddress(int from, int to) {
+    public Address getSubAddress(int from, int to, boolean shift) {
         LinkedHashSet<Integer> set = bits.stream()
                 .filter(e -> e >= from && e < to)
-                .map(e -> e - from)
+                .map(e -> e - (shift ? from : 0))
                 .sorted()
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         return new Address(set);
@@ -64,8 +68,13 @@ public class Address implements IAddress {
         return Address.fromBitStringToAddress(Long.toBinaryString(decimal));
     }
 
-    public static Address offsetAddress(IAddress address, int offset) {
+    public static Address offsetAddress(Address address, int offset) {
         return fromDecimalToAddress(address.getAsInteger() + offset);
+    }
+
+    @Override
+    public int hashCode() {
+        return bits.hashCode();
     }
 
     @Override

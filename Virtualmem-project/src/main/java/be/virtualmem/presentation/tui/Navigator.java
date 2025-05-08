@@ -4,9 +4,10 @@ import be.virtualmem.global.instruction.IInstruction;
 import be.virtualmem.global.instruction.Read;
 import be.virtualmem.global.instruction.Write;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
+import be.virtualmem.logic.storage.BackingStore;
 
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class Navigator {
@@ -21,11 +22,12 @@ public class Navigator {
                 Please enter the digit as selection, from the list below:
                 1) Run next instruction
                 2) Fast forward next x instructions
-                3) Show physical memory
-                4) Show backing store
-                5) Show page table entry content
-                6) Show statistics
-                7) Current system clock status
+                3) Show statistics
+                4) Show physical memory
+                5) Show backing store
+                6) Show complete backing store
+                7) Show page table entry content
+                8) Current system clock status
                 0) Exit
                 """;
         // Statistics contains: The number of page ins, page evictions, and page outs
@@ -42,8 +44,9 @@ public class Navigator {
                 switch (selection) {
                     case 1: runNextInstruction(); break;
                     case 2: runNextXInstruction(); break;
-                    case 3: showPhysicalMemory(); break;
-
+                    case 4: showPhysicalMemory(); break;
+                    case 5: showBackingStore(false); break;
+                    case 6: showBackingStore(true); break;
                     case 0: return;
                     default: System.out.println("Invalid selection. Try again."); break;
                 }
@@ -96,7 +99,33 @@ public class Navigator {
                         Map.Entry::getKey,
                         Map.Entry::getValue
                 ));
-        String printable = PrettyPrinter.tablePrinter("Physical Memory", 6, "Index",15, "Frame", typedMap);
+        String printable = PrettyPrinter.tablePrinterSingle("Physical Memory", 6, "Index",40, "Frame", typedMap);
         System.out.println(printable);
+    }
+
+
+    private void showBackingStore(boolean complete) {
+        int limit = 10;
+        Map<Integer, List<IPrintTUI>> flattenedPages = BackingStore.getInstance().getBackingStores().entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> new ArrayList<>(entry.getValue().values())
+                ));
+
+        if (complete) {
+            System.out.println("! To Exit The Backing Store, type 'exit' and press enter. !\n\n");
+            for (Entry<Integer, List<IPrintTUI>> entry : flattenedPages.entrySet()) {
+                System.out.println("Backing store for process " + entry.getKey() + ":");
+                String printable = PrettyPrinter.tablePrinterList("Backing Store", 6, "PID",40, "Page", null, flattenedPages);
+                System.out.println(printable);
+
+                String input = scanner.nextLine();
+                if (input.toLowerCase(Locale.ROOT).equals("exit"))
+                    break;
+            }
+        } else {
+            String printable = PrettyPrinter.tablePrinterList("Backing Store", 6, "PID",40, "Page", limit, flattenedPages);
+            System.out.println(printable);
+        }
     }
 }

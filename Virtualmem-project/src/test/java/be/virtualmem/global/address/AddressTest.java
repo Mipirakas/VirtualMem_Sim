@@ -50,8 +50,8 @@ class AddressTest {
     void getSubAddress() {
         Address address = new Address(Set.of(0, 2));
 
-        Assertions.assertEquals(address, address46.getSubAddress(3, 6));
-        Assertions.assertEquals(address, address69.getSubAddress(0, 3));
+        Assertions.assertEquals(address, address46.getSubAddress(3, 6, true));
+        Assertions.assertEquals(address, address69.getSubAddress(0, 3, true));
     }
 
     @Test

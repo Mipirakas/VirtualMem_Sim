@@ -5,7 +5,7 @@ import be.virtualmem.global.Constants;
 import java.util.Arrays;
 
 public class AddressTranslator {
-    public static Long fromAddressToPageTableLevelEntryId(IAddress address, int level) {
+    public static Long fromAddressToPageTableLevelEntryId(Address address, int level) {
         Long pageTableEntryId = null;
         if (level >= 0 && level < Constants.PAGE_TABLE_ENTRIES.length) {
             final int pageTableSize = Constants.PAGE_TABLE_ENTRIES[level];
@@ -14,16 +14,16 @@ public class AddressTranslator {
             for (int i = level + 1; i < Constants.PAGE_TABLE_ENTRIES.length; i++)
                 startIndex += Constants.PAGE_TABLE_ENTRIES[i];
 
-            pageTableEntryId = ((Address) address).getSubAddress(startIndex, startIndex + pageTableSize).getAsInteger(); // Maybe create custom method
+            pageTableEntryId = address.getSubAddress(startIndex, startIndex + pageTableSize, true).getAsInteger(); // Maybe create custom method
         }
 
         return pageTableEntryId;
     }
 
-    public static Long fromAddressGetPhysicalAddressOffset(IAddress address) {
+    public static Long fromAddressGetPhysicalAddressOffset(Address address) {
         Long offset = null;
         if (address instanceof Address) {
-            offset = ((Address) address).getSubAddress(0, Constants.ADDRESS_OFFSET_BITS).getAsInteger();
+            offset = address.getSubAddress(0, Constants.ADDRESS_OFFSET_BITS, true).getAsInteger();
         }
         return offset;
     }

@@ -2,14 +2,19 @@ package be.virtualmem.logic.process.memory;
 
 
 import be.virtualmem.global.Constants;
+import be.virtualmem.logic.process.ProcessManager;
+import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
+import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
+import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // Singleton
 public class PhysicalMemory {
     private static final PhysicalMemory instance = new PhysicalMemory();
+    private IAlgorithm algorithm;
+
     private Map<Integer, Frame> frames;
     // Reallocation algorithm
 
@@ -19,15 +24,30 @@ public class PhysicalMemory {
         for (int i = 0; i < Constants.FRAMES_IN_RAM; i++){
             frames.put(i, new Frame());
         }
+
+        algorithm = new SecondChanceAlgorithm(frames);
     }
 
     public static PhysicalMemory getInstance() {
         return instance;
     }
 
-    public Frame insertPage(Page page) {
+    public Integer swapPage(Page page, int pid) {
         // Return the frame where the page was inserted based on
-        return null;
+        Integer frameId = algorithm.frameIdToReallocate();
+        Page oldPage;
+
+        if (frameId != null) {
+            Frame frame = frames.get(frameId);
+            if (frame != null) {
+                oldPage = frame.getPage();
+                if (frame.getPage() != null)
+                    BackingStore.getInstance().addPage(frame.getPid(), oldPage.getAddress(), oldPage);
+                frame.setPage(page);
+                frame.setPid(pid);
+            }
+        }
+        return frameId;
     }
 
     public Map<Integer, Frame> getFrames() {
