@@ -12,6 +12,10 @@ public class Address implements IAddress {
         this.bits = new LinkedHashSet<>(bits);
     }
 
+    public Address(IAddress address) {
+        this.bits = new LinkedHashSet<>(address.getBits());
+    }
+
     public LinkedHashSet<Integer> getBits() {
         return bits;
     }

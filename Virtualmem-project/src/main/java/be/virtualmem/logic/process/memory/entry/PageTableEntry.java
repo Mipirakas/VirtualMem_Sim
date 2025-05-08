@@ -38,6 +38,7 @@ public class PageTableEntry implements IPageEntry {
         if (accessible == 0 || present == 0)
             throw new Exception("Segmentation fault: this page is not accessible");
         accessed = 1;
+
     }
 
     public void write() throws Exception {
