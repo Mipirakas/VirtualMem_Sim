@@ -4,22 +4,18 @@ import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.process.memory.table.PageTableStructure;
+import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ProcessMemory {
     private PageTableStructure pageTableStructure;
-    private Map<Address, Page> pages;
     private int pid;
 
     public ProcessMemory(int pid) {
         pageTableStructure = new PageTableStructure(Constants.PAGE_TABLE_ENTRIES.length);
-        pages = new HashMap<>();
         this.pid = pid;
         // Create memory
     }
@@ -29,7 +25,7 @@ public class ProcessMemory {
         // If memory is mapped, but not in physical memory, reallocate
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
-        Page page = pages.get(pageAddress);
+        Page page = BackingStore.getInstance().getPage(pid, pageAddress);
 
         // If page is null, read from physical memory
         if (pageTableEntry == null)
@@ -55,7 +51,7 @@ public class ProcessMemory {
         // If memory is mapped, but not in physical memory, reallocate
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
-        Page page = pages.get(pageAddress);
+        Page page = BackingStore.getInstance().getPage(pid, pageAddress);
 
         // If page is null, read from physical memory
         if (pageTableEntry == null)
@@ -86,7 +82,7 @@ public class ProcessMemory {
             Address addressToAdd = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));
             Page pageToAdd = new Page(addressToAdd, Constants.PAGE_SIZE);
             pagesToAdd.add(pageToAdd);
-            pages.put(addressToAdd, pageToAdd);
+            BackingStore.getInstance().addPage(pid, addressToAdd, pageToAdd);
         }
 
         pageTableStructure.mapPageTables(pagesToAdd);
@@ -101,10 +97,11 @@ public class ProcessMemory {
 
         for (int i = 0; i < requiredPages; i++) {
             Address addressToRemove = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));
-            if (pages.get(addressToRemove) != null)
-                pagesToRemove.add(pages.get(addressToRemove));
+            Page pageToRemove = BackingStore.getInstance().getPage(pid, addressToRemove);
+            if (pageToRemove != null)
+                pagesToRemove.add(pageToRemove);
             // Remove mapped pages to the map
-            pages.remove(addressToRemove);
+            BackingStore.getInstance().removePage(pid, addressToRemove);
         }
 
         pageTableStructure.unmapPageTables(pagesToRemove);
@@ -112,9 +109,5 @@ public class ProcessMemory {
 
     public void free() {
         // Free memory
-    }
-
-    public void setPage(Page page) {
-        pages.put(page.getAddress(), page);
     }
 }

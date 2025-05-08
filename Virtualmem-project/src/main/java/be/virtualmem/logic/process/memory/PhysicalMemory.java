@@ -5,6 +5,7 @@ import be.virtualmem.global.Constants;
 import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
 import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
+import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class PhysicalMemory {
             if (frame != null) {
                 oldPage = frame.getPage();
                 if (frame.getPage() != null)
-                    ProcessManager.getInstance().getProcess(frame.getPid()).getProcessMemory().setPage(oldPage);
+                    BackingStore.getInstance().addPage(frame.getPid(), oldPage.getAddress(), oldPage);
                 frame.setPage(page);
                 frame.setPid(pid);
             }
