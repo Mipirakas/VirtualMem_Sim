@@ -13,7 +13,7 @@ public class System implements ISystemContext {
 
     public void boot(){
         // Add the instructions
-        processManager = new ProcessManager();
+        processManager = ProcessManager.getInstance();
         instructionManager = new InstructionManager(processManager);
     }
 

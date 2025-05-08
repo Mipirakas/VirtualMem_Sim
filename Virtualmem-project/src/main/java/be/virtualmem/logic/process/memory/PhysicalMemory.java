@@ -2,6 +2,7 @@ package be.virtualmem.logic.process.memory;
 
 
 import be.virtualmem.global.Constants;
+import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
 import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
 
@@ -30,19 +31,22 @@ public class PhysicalMemory {
         return instance;
     }
 
-    public Page swapPage(Page page) {
+    public Integer swapPage(Page page, int pid) {
         // Return the frame where the page was inserted based on
         Integer frameId = algorithm.frameIdToReallocate();
-        Page oldPage = null;
+        Page oldPage;
 
         if (frameId != null) {
             Frame frame = frames.get(frameId);
             if (frame != null) {
                 oldPage = frame.getPage();
+                if (frame.getPage() != null)
+                    ProcessManager.getInstance().getProcess(frame.getPid()).getProcessMemory().setPage(oldPage);
                 frame.setPage(page);
+                frame.setPid(pid);
             }
         }
-        return oldPage;
+        return frameId;
     }
 
     public Map<Integer, Frame> getFrames() {

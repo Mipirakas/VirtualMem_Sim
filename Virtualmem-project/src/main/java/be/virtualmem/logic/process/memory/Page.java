@@ -1,16 +1,15 @@
 package be.virtualmem.logic.process.memory;
 
 import be.virtualmem.global.address.Address;
-import be.virtualmem.global.address.IAddress;
 import be.virtualmem.presentation.tui.IPrintTUI;
 
 public class Page implements IPrintTUI {
-    private IAddress address; // Start address
+    private Address address; // Start address
     private int size;
     private int accessed = 0;
     private int dirty = 0;
 
-    public Page(IAddress address, int size) {
+    public Page(Address address, int size) {
         this.address = address;
         this.size = size;
     }
@@ -20,7 +19,7 @@ public class Page implements IPrintTUI {
         this.size = page.size;
     }
 
-    public IAddress getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -42,6 +41,6 @@ public class Page implements IPrintTUI {
 
     @Override
     public String print() {
-        return "Address: " + address.toString() + " \t| Size: " + size;
+        return "Address: " + address.getAsHex() + " ~ Size: " + size;
     }
 }

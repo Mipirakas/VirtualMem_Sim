@@ -1,20 +1,24 @@
 package be.virtualmem.global.instruction;
 
-import be.virtualmem.global.address.IAddress;
+import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.process.IProcessManager;
 
 public class Read implements IInstruction {
     private int pid;
-    private IAddress address;
+    private Address address;
 
-    public Read(int pid, IAddress address){
+    public Read(int pid, Address address){
         this.pid = pid;
         this.address = address;
     }
 
     @Override
     public void execute(IProcessManager processManager) {
-        processManager.getProcess(pid).getProcessMemory().read(address);
+        try {
+            processManager.getProcess(pid).getProcessMemory().read(address);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

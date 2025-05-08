@@ -96,7 +96,7 @@ public class Navigator {
                         Map.Entry::getKey,
                         Map.Entry::getValue
                 ));
-        String printable = PrettyPrinter.tablePrinter("Physical Memory", 6, "Index",15, "Frame", typedMap);
+        String printable = PrettyPrinter.tablePrinter("Physical Memory", 6, "Index",40, "Frame", typedMap);
         System.out.println(printable);
     }
 }

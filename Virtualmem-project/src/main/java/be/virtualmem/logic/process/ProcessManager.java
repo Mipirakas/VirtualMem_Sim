@@ -8,10 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProcessManager implements IProcessManager {
+    private static ProcessManager instance = new ProcessManager();
     private Map<Integer, IProcess> processes;
 
-    public ProcessManager(){
+    private ProcessManager(){
         processes = new HashMap<>();
+    }
+
+    public static ProcessManager getInstance() {
+        return instance;
     }
 
     @Override
@@ -21,7 +26,7 @@ public class ProcessManager implements IProcessManager {
 
     @Override
     public void startProcess(int pid) {
-        processes.put(pid, new Process(pid, allocateMemory()));
+        processes.put(pid, new Process(pid, allocateMemory(pid)));
     }
 
     @Override
@@ -30,7 +35,7 @@ public class ProcessManager implements IProcessManager {
         processes.remove(pid); // Remove from processes
     }
 
-    private ProcessMemory allocateMemory(){
-        return new ProcessMemory();
+    private ProcessMemory allocateMemory(int pid){
+        return new ProcessMemory(pid);
     }
 }

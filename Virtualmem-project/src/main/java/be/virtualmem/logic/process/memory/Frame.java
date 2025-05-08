@@ -4,10 +4,11 @@ import be.virtualmem.presentation.tui.IPrintTUI;
 
 public class Frame implements IPrintTUI {
     private Page page = null;
+    private int pid;
 
-    public Frame(){}
+    public Frame() {}
 
-    public Frame(Page page){
+    public Frame(Page page) {
         this.page = page;
     }
 
@@ -17,6 +18,14 @@ public class Frame implements IPrintTUI {
 
     public void setPage(Page page) {
         this.page = page;
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     @Override
