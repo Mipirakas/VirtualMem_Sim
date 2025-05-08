@@ -28,7 +28,8 @@ public class ProcessMemory {
         // If memory not mapped yet, end process (Segmentation fault)
         // If memory is mapped, but not in physical memory, reallocate
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
-        Page page = pages.get(address);
+        Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
+        Page page = pages.get(pageAddress);
 
         // If page is null, read from physical memory
         if (pageTableEntry == null)
