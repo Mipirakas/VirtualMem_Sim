@@ -5,6 +5,7 @@ import be.virtualmem.global.Constants;
 import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
 import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
+import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.HashMap;
@@ -41,8 +42,16 @@ public class PhysicalMemory {
             Frame frame = frames.get(frameId);
             if (frame != null) {
                 oldPage = frame.getPage();
-                if (frame.getPage() != null)
+                // Frame was not empty
+                if (oldPage != null) {
+                    oldPage.pageOut();
                     BackingStore.getInstance().addPage(frame.getPid(), oldPage.getAddress(), oldPage);
+                    Statistics.getInstance().incrementPageEvictionCount();
+                    // If the page was written to
+                    if (oldPage.getDirty() == 1)
+                        Statistics.getInstance().incrementPageOutCount();
+                }
+                Statistics.getInstance().incrementPageInCount();
                 frame.setPage(page);
                 frame.setPid(pid);
             }

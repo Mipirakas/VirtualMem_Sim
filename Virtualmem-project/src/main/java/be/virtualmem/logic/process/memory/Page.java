@@ -39,6 +39,11 @@ public class Page implements IPrintTUI {
         this.dirty = dirty;
     }
 
+    public void pageOut() {
+        this.dirty = 0;
+        this.accessed = 0;
+    }
+
     @Override
     public String print() {
         return "Address: " + address.getAsHex() + " ~ Size: " + size;

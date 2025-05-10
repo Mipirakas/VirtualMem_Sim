@@ -3,7 +3,12 @@ package be.virtualmem.presentation.tui;
 import be.virtualmem.global.instruction.IInstruction;
 import be.virtualmem.global.instruction.Read;
 import be.virtualmem.global.instruction.Write;
+import be.virtualmem.logic.process.memory.Frame;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
+import be.virtualmem.logic.statistics.Statistics;
+import be.virtualmem.logic.statistics.action.ActionType;
+import be.virtualmem.logic.statistics.action.Property;
+import be.virtualmem.logic.statistics.action.WriteAction;
 import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.*;
@@ -44,9 +49,11 @@ public class Navigator {
                 switch (selection) {
                     case 1: runNextInstruction(); break;
                     case 2: runNextXInstruction(); break;
+                    case 3: showStatistics(); break;
                     case 4: showPhysicalMemory(); break;
                     case 5: showBackingStore(false); break;
                     case 6: showBackingStore(true); break;
+                    case 8: showClock(); break;
                     case 0: return;
                     default: System.out.println("Invalid selection. Try again."); break;
                 }
@@ -63,15 +70,29 @@ public class Navigator {
 
     private void runNextInstruction() {
         IInstruction instruction = system.getInstructionManager().getNextInstruction();
-
-        if (instruction instanceof Read || instruction instanceof Write)
-            printInvolvedAddresses(instruction);
         System.out.println("Next instruction: " + instruction.print());
         system.run();
+
+        printInvolvedAddresses(instruction);
+    }
+
+    private void showStatistics() {
+        Map<String, Integer> map = Statistics.getInstance().map();
+        String printable = PrettyPrinter.tablePrinterSingle("Statistics", 20, "Property",10, "Value", map);
+        System.out.println(printable);
     }
 
     private void printInvolvedAddresses(IInstruction instruction) {
         // Print virtual and physical address of this instruction in physical memory
+        Map<Property, String> map = null;
+        if (instruction instanceof Read)
+            map = Statistics.getInstance().getLastActionOfType(ActionType.READ).getPropertyStringMap();
+        else if (instruction instanceof Write)
+            map = Statistics.getInstance().getLastActionOfType(ActionType.WRITE).getPropertyStringMap();
+
+        if (map != null) {
+            String printable = PrettyPrinter.tablePrinterSingle("Instruction", 20, "Property",20, "Value", map);
+            System.out.println(printable);        }
     }
 
     private void runNextXInstruction() {
@@ -92,17 +113,10 @@ public class Navigator {
     }
 
     private void showPhysicalMemory() {
-        Map<Integer, IPrintTUI> typedMap = PhysicalMemory.getInstance().getFrames().entrySet()
-                .stream()
-                .filter(e -> e.getValue() != null)
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                ));
+        Map<Integer, Frame> typedMap = PhysicalMemory.getInstance().getFrames();
         String printable = PrettyPrinter.tablePrinterSingle("Physical Memory", 6, "Index",40, "Frame", typedMap);
         System.out.println(printable);
     }
-
 
     private void showBackingStore(boolean complete) {
         int limit = 10;
@@ -127,5 +141,9 @@ public class Navigator {
             String printable = PrettyPrinter.tablePrinterList("Backing Store", 6, "PID",40, "Page", limit, flattenedPages);
             System.out.println(printable);
         }
+    }
+
+    private void showClock() {
+        System.out.println("Current clock: " + system.getClock());
     }
 }

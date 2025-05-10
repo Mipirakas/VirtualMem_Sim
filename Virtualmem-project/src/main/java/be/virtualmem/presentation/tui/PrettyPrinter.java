@@ -1,10 +1,12 @@
 package be.virtualmem.presentation.tui;
 
 
+import be.virtualmem.logic.statistics.action.Property;
 import be.virtualmem.presentation.tui.visuals.TableChars;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class PrettyPrinter {
     private static String stringFormatting(String string, int maxLength) {
@@ -69,8 +71,8 @@ public class PrettyPrinter {
                 .append(TableChars.BOTTOM_RIGHT);
     }
 
-    public static String tablePrinterSingle(String title, int keyLength, String column1Name, int valueLength,
-                                      String column2Name, Map<Integer, IPrintTUI> structure) {
+    public static <E, T> String  tablePrinterSingle(String title, int keyLength, String column1Name, int valueLength,
+                                      String column2Name, Map<E, T> structure) {
         StringBuilder sb = new StringBuilder();
         int length = keyLength + valueLength + 3;
 
@@ -80,9 +82,13 @@ public class PrettyPrinter {
         makeHeader(length, title, keyLength, column1Name, valueLength, column2Name, sb);
 
         // Rows
-        for  (Map.Entry<Integer, IPrintTUI> entry : structure.entrySet()) {
+        for  (Map.Entry<E, T> entry : structure.entrySet()) {
             String val1 = entry.getKey().toString();
-            String val2 = entry.getValue().print();
+            String val2 = "";
+            if (entry.getValue() instanceof IPrintTUI)
+                val2 = ((IPrintTUI) entry.getValue()).print();
+            else
+                val2 = entry.getValue().toString();
 
             sb.append(TableChars.VERTICAL)
                     .append(PrettyPrinter.stringFormatting(val1, keyLength))
@@ -96,8 +102,8 @@ public class PrettyPrinter {
         return sb.toString();
     }
 
-    public static String tablePrinterList(String title, int keyLength, String column1Name, int valueLength,
-                                      String column2Name, Integer limit, Map<Integer, List<IPrintTUI>> structure) {
+    public static <E> String tablePrinterList(String title, int keyLength, String column1Name, int valueLength,
+                                      String column2Name, Integer limit, Map<E, List<IPrintTUI>> structure) {
         StringBuilder sb = new StringBuilder();
         int length = keyLength + valueLength + 3;
 
@@ -107,7 +113,7 @@ public class PrettyPrinter {
         makeHeader(length, title, keyLength, column1Name, valueLength, column2Name, sb);
 
         // Rows
-        for  (Map.Entry<Integer, List<IPrintTUI>> entry : structure.entrySet()) {
+        for  (Map.Entry<E, List<IPrintTUI>> entry : structure.entrySet()) {
             String val1 = PrettyPrinter.stringFormatting(entry.getKey().toString(), keyLength);
             int count = 0;
 

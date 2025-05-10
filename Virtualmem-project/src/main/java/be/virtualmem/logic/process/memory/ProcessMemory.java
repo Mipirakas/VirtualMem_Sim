@@ -4,10 +4,14 @@ import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.process.memory.table.PageTableStructure;
+import be.virtualmem.logic.statistics.Statistics;
+import be.virtualmem.logic.statistics.action.IAction;
+import be.virtualmem.logic.statistics.action.Property;
+import be.virtualmem.logic.statistics.action.ReadAction;
+import be.virtualmem.logic.statistics.action.WriteAction;
 import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ProcessMemory {
@@ -43,6 +47,11 @@ public class ProcessMemory {
             page.setAccessed(1);
         }
 
+        IAction action = new ReadAction();
+        action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
+        action.addProperty(Property.PHYSICAL_ADDRESS, getPhysicalAddress(address, pageTableEntry.getPfn()).getAsHex());
+        Statistics.getInstance().addAction(action);
+
         pageTableEntry.read();
     }
 
@@ -70,6 +79,12 @@ public class ProcessMemory {
             page.setAccessed(1);
             page.setDirty(1);
         }
+
+        // Statistics
+        IAction action = new WriteAction();
+        action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
+        action.addProperty(Property.PHYSICAL_ADDRESS, getPhysicalAddress(address, pageTableEntry.getPfn()).getAsHex());
+        Statistics.getInstance().addAction(action);
 
         pageTableEntry.write();
     }
@@ -105,6 +120,12 @@ public class ProcessMemory {
         }
 
         pageTableStructure.unmapPageTables(pagesToRemove);
+    }
+
+    private Address getPhysicalAddress(Address address, Integer frameNumber) {
+        Long decimalValue = (long) (frameNumber * Math.pow(2, Constants.PAGE_SIZE));
+        decimalValue += address.getSubAddress(0, Constants.ADDRESS_OFFSET_BITS, true).getAsInteger();
+        return Address.fromDecimalToAddress(decimalValue);
     }
 
     public void free() {
