@@ -3,6 +3,7 @@ package be.virtualmem.logic.process.memory.table;
 import be.virtualmem.global.address.Address;
 import be.virtualmem.global.address.AddressTranslator;
 import be.virtualmem.logic.process.memory.Page;
+import be.virtualmem.logic.process.memory.PhysicalMemory;
 import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
@@ -91,7 +92,15 @@ public class PageTableStructure {
                         pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
                     } else {
                         if (i == levels - 1) {
-                            // TODO: If pfn is set, Possibly need to add the frame to the free pool
+                            PageTableEntry pte = (PageTableEntry) pageTable.getEntry(pageTableOffset);
+
+                            // pte moet bestaan, maar is toch null
+                            // idk waar de fout zit
+                            if (pte != null && pte.getPfn() != null) {
+                                page.pageOut();
+                                PhysicalMemory.getInstance().getFrames().get(pte.getPfn()).setPage(null);
+                            }
+
                             pageTable.removeEntry(pageTableOffset);
                         } else {
                             PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableOffset);
