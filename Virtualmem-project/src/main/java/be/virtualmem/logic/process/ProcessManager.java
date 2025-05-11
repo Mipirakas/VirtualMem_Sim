@@ -1,6 +1,5 @@
 package be.virtualmem.logic.process;
 
-import be.virtualmem.global.process.IProcess;
 import be.virtualmem.global.process.Process;
 import be.virtualmem.logic.process.memory.ProcessMemory;
 
@@ -9,7 +8,7 @@ import java.util.Map;
 
 public class ProcessManager implements IProcessManager {
     private static ProcessManager instance = new ProcessManager();
-    private Map<Integer, IProcess> processes;
+    private Map<Integer, Process> processes;
 
     private ProcessManager(){
         processes = new HashMap<>();
@@ -20,7 +19,7 @@ public class ProcessManager implements IProcessManager {
     }
 
     @Override
-    public IProcess getProcess(int pid) {
+    public Process getProcess(int pid) {
         return processes.get(pid);
     }
 

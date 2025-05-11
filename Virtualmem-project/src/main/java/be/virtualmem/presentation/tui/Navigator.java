@@ -1,10 +1,15 @@
 package be.virtualmem.presentation.tui;
 
+import be.virtualmem.global.Constants;
+import be.virtualmem.global.address.Address;
 import be.virtualmem.global.instruction.IInstruction;
 import be.virtualmem.global.instruction.Read;
 import be.virtualmem.global.instruction.Write;
+import be.virtualmem.global.process.Process;
+import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.Frame;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
+import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.statistics.action.ActionType;
 import be.virtualmem.logic.statistics.action.Property;
@@ -53,6 +58,7 @@ public class Navigator {
                     case 4: showPhysicalMemory(); break;
                     case 5: showBackingStore(false); break;
                     case 6: showBackingStore(true); break;
+                    case 7: showPageTableEntryContent(); break;
                     case 8: showClock(); break;
                     case 0: return;
                     default: System.out.println("Invalid selection. Try again."); break;
@@ -66,6 +72,11 @@ public class Navigator {
     private int promptIntegerSelection() throws NumberFormatException {
         System.out.print("> ");
         return Integer.parseInt(scanner.nextLine());
+    }
+
+    private String promptStringSelection() {
+        System.out.print("> ");
+        return scanner.nextLine();
     }
 
     private void runNextInstruction() {
@@ -141,6 +152,27 @@ public class Navigator {
             String printable = PrettyPrinter.tablePrinterList("Backing Store", 6, "PID",40, "Page", limit, flattenedPages);
             System.out.println(printable);
         }
+    }
+
+    private void showPageTableEntryContent() {
+        System.out.println("Please provide the process id to show the page table entry content for:");
+        int pid = promptIntegerSelection();
+        System.out.println("Please provide the virtual address to show the page table entry content for (in hexadecimal format, no prefix):");
+        String virtualAddress = promptStringSelection();
+
+        Process process = ProcessManager.getInstance().getProcess(pid);
+        if (process != null) {
+            Address address = Address.fromHexToAddress(virtualAddress);
+            address = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
+
+            PageTableEntry pte = process.getProcessMemory().getPageTableStructure().getPageTableEntry(address);
+            String printable = PrettyPrinter.tablePrinterSingle("PTE at " + address.getAsHex(),
+                    20, "Property",5, "Value", pte.getMap());
+            System.out.println(printable);
+        } else {
+            System.out.println("Process not found!");
+        }
+
     }
 
     private void showClock() {

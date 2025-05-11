@@ -131,4 +131,7 @@ public class ProcessMemory {
     public void free() {
         // Free memory
     }
+    public PageTableStructure getPageTableStructure() {
+        return pageTableStructure;
+    }
 }

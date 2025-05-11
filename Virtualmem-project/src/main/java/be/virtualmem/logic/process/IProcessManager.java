@@ -1,10 +1,9 @@
 package be.virtualmem.logic.process;
 
-import be.virtualmem.global.process.IProcess;
-import java.util.List;
+import be.virtualmem.global.process.Process;
 
 public interface IProcessManager {
-    IProcess getProcess(int pid);
+    Process getProcess(int pid);
     void startProcess(int pid);
     void endProcess(int pid);
 }
