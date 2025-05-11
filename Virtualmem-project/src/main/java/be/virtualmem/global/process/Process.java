@@ -2,7 +2,7 @@ package be.virtualmem.global.process;
 
 import be.virtualmem.logic.process.memory.ProcessMemory;
 
-public class Process implements IProcess {
+public class Process {
     private int pid;
     private ProcessMemory processMemory;
 
@@ -12,7 +12,6 @@ public class Process implements IProcess {
         this.processMemory = processMemory;
     }
 
-    @Override
     public ProcessMemory getProcessMemory() {
         return processMemory;
     }

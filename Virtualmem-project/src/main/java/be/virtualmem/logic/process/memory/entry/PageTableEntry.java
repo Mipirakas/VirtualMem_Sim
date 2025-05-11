@@ -1,5 +1,10 @@
 package be.virtualmem.logic.process.memory.entry;
 
+import be.virtualmem.presentation.tui.IPrintTUI;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class PageTableEntry implements IPageEntry {
     private byte accessible; // Is it accessible by the process
     private byte present; // Is it in memory
@@ -58,5 +63,15 @@ public class PageTableEntry implements IPageEntry {
 
     public Integer getPfn() {
         return pfn;
+    }
+
+    public Map<String, Integer> getMap() {
+        Map<String, Integer> map = new LinkedHashMap<>();
+        map.put("Accessible", (int) accessible);
+        map.put("Present", (int) present);
+        map.put("Accessed", (int) accessed);
+        map.put("Dirty", (int) dirty);
+        map.put("PFN", pfn);
+        return map;
     }
 }
