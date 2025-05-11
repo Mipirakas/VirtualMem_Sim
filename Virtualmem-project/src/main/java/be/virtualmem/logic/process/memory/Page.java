@@ -46,6 +46,7 @@ public class Page implements IPrintTUI {
 
     @Override
     public String print() {
-        return "Address: " + address.getAsHex() + " ~ Size: " + size;
+
+        return "Address: " + address.getAsHex() + " ~ Size: " + (int) Math.pow(2, size) + "B";
     }
 }

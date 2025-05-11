@@ -18,6 +18,8 @@ public class Frame implements IPrintTUI {
 
     public void setPage(Page page) {
         this.page = page;
+        if (page == null)
+            pid = 0;
     }
 
     public int getPid() {

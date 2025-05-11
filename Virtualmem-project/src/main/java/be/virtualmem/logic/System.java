@@ -25,6 +25,19 @@ public class System implements ISystemContext {
         instructionManager.executeNextInstruction();
     }
 
+    public void runXInstructions(int x) {
+        while (x > 0 && !getInstructionManager().hasFinished()) {
+            run();
+            x--;
+        }
+    }
+
+    public void runAllInstructions() {
+        while (!getInstructionManager().hasFinished()) {
+            run();
+        }
+    }
+
     public InstructionManager getInstructionManager() {
         return instructionManager;
     }

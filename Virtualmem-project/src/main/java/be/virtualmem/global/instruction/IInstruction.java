@@ -5,4 +5,5 @@ import be.virtualmem.presentation.tui.IPrintTUI;
 
 public interface IInstruction extends IPrintTUI {
     void execute(IProcessManager processManager);
+    String print();
 }

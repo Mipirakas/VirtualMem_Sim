@@ -10,6 +10,7 @@ import java.util.Queue;
 public class InstructionManager {
     private Queue<IInstruction> instructionQueue;
     private ProcessManager processManager;
+    private IInstruction lastInstruction;
 
     public InstructionManager(ProcessManager processManager) {
         instructionQueue = InstructionReader.readFromFile(Constants.FEW_INSTRUCTION_DATASET);
@@ -17,8 +18,11 @@ public class InstructionManager {
     }
 
     public void executeNextInstruction(){
-        if (!instructionQueue.isEmpty())
-            instructionQueue.poll().execute(processManager);
+        if (!instructionQueue.isEmpty()) {
+            IInstruction instruction = instructionQueue.poll();
+            lastInstruction = instruction;
+            instruction.execute(processManager);
+        }
     }
 
     public IInstruction getNextInstruction(){
@@ -27,5 +31,9 @@ public class InstructionManager {
 
     public boolean hasFinished() {
         return instructionQueue.isEmpty();
+    }
+
+    public IInstruction getLastFinishedInstruction() {
+        return lastInstruction;
     }
 }
