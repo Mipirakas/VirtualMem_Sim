@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class SecondChanceAlgorithm  implements IAlgorithm {
+public class SecondChanceAlgorithm implements IAlgorithm {
     private TreeMap<Integer, Frame> frames;
     private int startIndex;
 

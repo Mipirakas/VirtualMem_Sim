@@ -17,6 +17,8 @@ public class Page implements IPrintTUI {
     public Page(Page page){
         this.address = new Address(page.address);
         this.size = page.size;
+        this.accessed = page.accessed;
+        this.dirty = page.dirty;
     }
 
     public Address getAddress() {
