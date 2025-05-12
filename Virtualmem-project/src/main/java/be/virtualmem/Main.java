@@ -1,17 +1,28 @@
 package be.virtualmem;
 
-import be.virtualmem.logic.System;
 import be.virtualmem.presentation.gui.controller.MainController;
 import be.virtualmem.presentation.tui.Navigator;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        System system = new System();
+        be.virtualmem.logic.System system = new be.virtualmem.logic.System();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Run in simulation in the GUI enter 'y', in the TUI enter 'n'");
+        String selection = scanner.nextLine();
 
-        MainController controller = new MainController(system);
-        controller.show();
+        // GUI
+        if (selection.strip().equalsIgnoreCase("y")) {
+            MainController controller = new MainController(system);
+            controller.show();
+        } else if (selection.strip().equalsIgnoreCase("n")) {
+            Navigator navigator = new Navigator(system);
+            navigator.run();
+        } else {
+            System.out.println("Invalid input, exiting...");
+        }
+        // TUI
 
-        Navigator navigator = new Navigator(system);
-        navigator.run();
     }
 }
