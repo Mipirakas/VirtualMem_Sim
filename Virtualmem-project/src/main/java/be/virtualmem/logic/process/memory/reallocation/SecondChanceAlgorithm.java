@@ -64,7 +64,7 @@ public class SecondChanceAlgorithm implements IAlgorithm {
                     // If class is 2 or 3 set accesed to 0
                     case 2:
                     case 3:
-                        state.getValue().requestCopy().setAccessed(0); break;
+                        state.getValue().setAccessed(0); break;
                     default:
                         throw new IllegalStateException("Unexpected class value: " + getClass(pageState));
                 }

@@ -15,6 +15,11 @@ public class PageState {
         return copyPage;
     }
 
+    public void setAccessed(int accessed) {
+        copyPage.setAccessed(accessed);
+        originalPage.setAccessed(accessed);
+    }
+
     public Page requestOriginal() {
         return originalPage;
     }
