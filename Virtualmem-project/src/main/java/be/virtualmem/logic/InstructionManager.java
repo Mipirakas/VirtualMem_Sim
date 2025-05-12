@@ -13,7 +13,7 @@ public class InstructionManager {
     private IInstruction lastInstruction;
 
     public InstructionManager(ProcessManager processManager) {
-        instructionQueue = InstructionReader.readFromFile(Constants.FEW_INSTRUCTION_DATASET);
+        instructionQueue = InstructionReader.readFromFile(Constants.MANY_INSTRUCTION_DATASET);
         this.processManager = processManager;
     }
 

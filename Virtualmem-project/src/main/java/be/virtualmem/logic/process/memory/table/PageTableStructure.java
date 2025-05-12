@@ -44,6 +44,42 @@ public class PageTableStructure {
     public void mapPageTables(List<Page> list) {
         // Also create necessary Page Table Directories
         for (Page page : list) {
+            // Possible cleaner implementation
+            /*IPageTable pageTable = baseTable;
+
+            for (int i = 0; i < levels; i++) {
+                Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
+                PageDirectoryEntry pageDirectoryEntry;
+
+                if (pageTableIndex != null) {
+                    pageTable.addEntry(pageTableIndex);
+                    IPageEntry pageEntry = pageTable.getEntry(pageTableIndex);
+
+                    if (i < levels - 1) {
+                        pageDirectoryEntry = (PageDirectoryEntry) pageEntry;
+                        if (pageDirectoryEntry == null) {
+                            System.out.println("wtfff");
+                            System.out.println(i);
+                            System.out.println(pageEntry.getClass().getSimpleName());
+                        }
+                        pageTable = pageDirectoryEntry.getPointer();
+
+                        if (pageTable == null) {
+                            PageTable pageTableToAdd = null;
+
+                            if (i < levels - 2) {
+                                pageTableToAdd = new PageTable(i + 1, PageDirectoryEntry::new);
+                            } else if (i == levels - 2) {
+                                pageTableToAdd = new PageTable(i + 1, PageTableEntry::new);
+                            }
+
+                            pageDirectoryEntry.setPointer(pageTableToAdd);
+                            pageTable = pageTableToAdd;
+                        }
+                    }
+                }
+            }*/
+
             IPageTable pageTable = baseTable;
 
             // Map page per page (can be done more efficiently)
@@ -62,6 +98,7 @@ public class PageTableStructure {
                         pageTable = pageDirectoryEntry.getPointer();
                     }
                 }
+
 
                 // If page table does not exist, create one
                 if (pageTable == null && pageDirectoryEntry != null) {

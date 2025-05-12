@@ -21,7 +21,7 @@ public class PageTable implements IPageTable {
     }
 
     public IPageEntry getEntry(Long id) {
-        if (id > 0 && id < pageTableSize) {
+        if (id >= 0 && id < pageTableSize) {
             return entries.get(id);
         }
         return null;
@@ -53,5 +53,4 @@ public class PageTable implements IPageTable {
             entry.setValue(null);
         }
     }
-
 }
