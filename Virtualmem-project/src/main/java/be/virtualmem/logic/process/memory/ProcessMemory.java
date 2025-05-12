@@ -40,9 +40,7 @@ public class ProcessMemory {
             Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
             pageTableEntry.setPfn(frameNumber);
             page.setAccessed(1);
-        }
-
-        if (page == null && pageTableEntry.getPfn() != null) {
+        } else if (page != null && pageTableEntry.getPfn() != null) {
             page = PhysicalMemory.getInstance().getFrames().get(pageTableEntry.getPfn()).getPage();
             page.setAccessed(1);
         }
@@ -72,9 +70,7 @@ public class ProcessMemory {
             pageTableEntry.setPfn(frameNumber);
             page.setAccessed(1);
             page.setDirty(1);
-        }
-
-        if (page == null && pageTableEntry.getPfn() != null) {
+        } else if (page != null && pageTableEntry.getPfn() != null) {
             page = PhysicalMemory.getInstance().getFrames().get(pageTableEntry.getPfn()).getPage();
             page.setAccessed(1);
             page.setDirty(1);
