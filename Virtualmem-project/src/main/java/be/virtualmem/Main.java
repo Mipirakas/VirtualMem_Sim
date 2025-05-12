@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         be.virtualmem.logic.System system = new be.virtualmem.logic.System();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Run in simulation in the GUI enter 'y', in the TUI enter 'n'");
+        System.out.println("Run the simulation in the GUI enter 'y', in the TUI enter 'n'");
         String selection = scanner.nextLine();
 
         // GUI
