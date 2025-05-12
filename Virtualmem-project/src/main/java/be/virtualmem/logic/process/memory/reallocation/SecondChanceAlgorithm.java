@@ -1,16 +1,20 @@
 package be.virtualmem.logic.process.memory.reallocation;
 
 import be.virtualmem.logic.process.memory.Frame;
+import com.sun.source.tree.Tree;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class SecondChanceAlgorithm  implements IAlgorithm {
-    private Map<Integer, Frame> frames;
+    private TreeMap<Integer, Frame> frames;
+    private int startIndex;
 
     public SecondChanceAlgorithm(Map<Integer, Frame> frames) {
-        this.frames = frames;
+        this.frames = new TreeMap<>(frames);
+        startIndex = 0;
     }
 
     public Integer frameIdToReallocate() {
@@ -21,19 +25,40 @@ public class SecondChanceAlgorithm  implements IAlgorithm {
 
         // Create states, no frame with null values
         Map<Integer, PageState> states = new HashMap<>();
-        for (Entry<Integer, Frame> entry : frames.entrySet())
+
+        // First: process entries from startIndex and up
+        for (Entry<Integer, Frame> entry : frames.tailMap(startIndex).entrySet()) {
             states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
+        }
+
+        // Then: process entries before startIndex
+        for (Entry<Integer, Frame> entry : frames.headMap(startIndex).entrySet()) {
+            states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
+        }
 
         return frameLoop(states);
     }
 
+    private void updateStartIndex(int offset) {
+        int nextIndex = startIndex + offset;
+        if (nextIndex < 0)
+            startIndex = 0;
+        else if (nextIndex >= frames.size())
+            startIndex = nextIndex - frames.size();
+        else
+            startIndex = nextIndex;
+    }
+
     private Integer frameLoop(Map<Integer, PageState> states) {
         for (int i = 0; i < 2; i++) {
+            int offset = 0;
             for (Entry<Integer, PageState> state : states.entrySet()) {
+                offset += i;
                 PageState pageState = state.getValue();
 
                 switch (getClass(pageState)) {
                     case 0:
+                        updateStartIndex(offset);
                         return state.getKey();
                     case 1:
                         state.getValue().requestCopy().setDirty(0); break;
