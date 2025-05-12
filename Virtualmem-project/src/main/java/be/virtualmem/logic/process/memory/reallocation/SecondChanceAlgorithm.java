@@ -1,9 +1,8 @@
 package be.virtualmem.logic.process.memory.reallocation;
 
 import be.virtualmem.logic.process.memory.Frame;
-import com.sun.source.tree.Tree;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -24,7 +23,7 @@ public class SecondChanceAlgorithm implements IAlgorithm {
                 return entry.getKey();
 
         // Create states, no frame with null values
-        Map<Integer, PageState> states = new HashMap<>();
+        Map<Integer, PageState> states = new LinkedHashMap<>();
 
         // First: process entries from startIndex and up
         for (Entry<Integer, Frame> entry : frames.tailMap(startIndex).entrySet()) {
