@@ -44,12 +44,12 @@ public class PhysicalMemory {
                 oldPage = frame.getPage();
                 // Frame was not empty
                 if (oldPage != null) {
-                    oldPage.pageOut();
                     BackingStore.getInstance().addPage(frame.getPid(), oldPage.getAddress(), oldPage);
                     Statistics.getInstance().incrementPageEvictionCount();
                     // If the page was written to
                     if (oldPage.getDirty() == 1)
                         Statistics.getInstance().incrementPageOutCount();
+                    oldPage.pageOut();
                 }
                 Statistics.getInstance().incrementPageInCount();
                 frame.setPage(page);
