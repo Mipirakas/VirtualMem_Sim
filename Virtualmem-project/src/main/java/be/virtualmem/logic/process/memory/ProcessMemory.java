@@ -21,30 +21,49 @@ public class ProcessMemory {
     public ProcessMemory(int pid) {
         pageTableStructure = new PageTableStructure(Constants.PAGE_TABLE_ENTRIES.length);
         this.pid = pid;
-        // Create memory
     }
 
-    public void read(Address address) throws Exception {
-        // If memory not mapped yet, end process (Segmentation fault)
-        // If memory is mapped, but not in physical memory, reallocate
+    private Page getPage(Address address) {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
-        Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
-        Page page = BackingStore.getInstance().getPage(pid, pageAddress);
-
-        // If page is null, read from physical memory
         if (pageTableEntry == null)
             throw new NullPointerException("Page not mapped yet!");
 
-        // Map page, not in memory yet
+        Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
+        Page page = null;
+
+        try {
+            // Try to get page from physical memory
+            page = PhysicalMemory.getInstance().getPage(pid, pageAddress);
+        } catch (Exception e) {
+            Statistics.getInstance().incrementPageFaultCount();
+        }
+
+        if (page == null) {
+            // If page not in memory get from backing store
+            page = BackingStore.getInstance().getPage(pid, pageAddress);
+        }
+
+        // Page not in memory yet
         if (page != null && pageTableEntry.getPfn() == null) {
             Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
             pageTableEntry.setPfn(frameNumber);
-            page.setAccessed(1);
-        } else if (page != null && pageTableEntry.getPfn() != null) {
-            page = PhysicalMemory.getInstance().getFrames().get(pageTableEntry.getPfn()).getPage();
-            page.setAccessed(1);
         }
 
+        return page;
+    }
+
+    public void read(Address address) throws Exception {
+        PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
+        if (pageTableEntry == null)
+            throw new NullPointerException("Page not mapped yet!");
+
+
+        Page page = getPage(address);
+
+        if (page != null)
+            page.setAccessed(1);
+
+        // Statistics
         IAction action = new ReadAction();
         action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
         action.addProperty(Property.PHYSICAL_ADDRESS, getPhysicalAddress(address, pageTableEntry.getPfn()).getAsHex());
@@ -54,24 +73,13 @@ public class ProcessMemory {
     }
 
     public void write(Address address) throws Exception {
-        // If memory not mapped yet, end process (Segmentation fault)
-        // If memory is mapped, but not in physical memory, reallocate
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
-        Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
-        Page page = BackingStore.getInstance().getPage(pid, pageAddress);
-
-        // If page is null, read from physical memory
         if (pageTableEntry == null)
             throw new NullPointerException("Page not mapped yet!");
 
-        // Map page, not in memory yet
-        if (page != null && pageTableEntry.getPfn() == null) {
-            Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
-            pageTableEntry.setPfn(frameNumber);
-            page.setAccessed(1);
-            page.setDirty(1);
-        } else if (page != null && pageTableEntry.getPfn() != null) {
-            page = PhysicalMemory.getInstance().getFrames().get(pageTableEntry.getPfn()).getPage();
+        Page page = getPage(address);
+
+        if (page != null) {
             page.setAccessed(1);
             page.setDirty(1);
         }
@@ -97,9 +105,6 @@ public class ProcessMemory {
         }
 
         pageTableStructure.mapPageTables(pagesToAdd);
-
-        // Add newly mapped pages to the map
-        // Test: ((PageDirectoryEntry) pageTableStructure.baseTable.getEntry(337)).pointer.getEntry(298)
     }
 
     public void unmap(Address address, int size) {

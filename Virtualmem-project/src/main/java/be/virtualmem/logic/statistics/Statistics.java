@@ -10,6 +10,7 @@ public class Statistics {
     int pageInCount; // Disk -> Memory
     int pageOutCount; // Memory -> Disk (does not happen when page not dirty)
     int pageEvictionCount; // Memory page removes
+    int pageFaultCount;
     Deque<IAction> actions;
 
     private Statistics() {
@@ -31,6 +32,9 @@ public class Statistics {
     }
     public void incrementPageEvictionCount() {
         pageEvictionCount++;
+    }
+    public void incrementPageFaultCount() {
+        pageFaultCount++;
     }
 
     public void addAction(IAction action) {
@@ -54,6 +58,7 @@ public class Statistics {
         map.put("pageInCount", pageInCount);
         map.put("pageOutCount", pageOutCount);
         map.put("pageEvictionCount", pageEvictionCount);
+        map.put("pageFaultCount", pageFaultCount);
         return map;
     }
 }
