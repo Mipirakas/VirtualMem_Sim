@@ -16,6 +16,10 @@ public class SecondChanceAlgorithm implements IAlgorithm {
         startIndex = 0;
     }
 
+    public int getStartIndex() {
+        return startIndex;
+    }
+
     public Integer frameIdToReallocate() {
         // Check if a frame has no pages
         for (Entry<Integer, Frame> entry : frames.entrySet())

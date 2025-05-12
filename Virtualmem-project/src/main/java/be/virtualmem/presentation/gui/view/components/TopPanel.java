@@ -8,6 +8,7 @@ public class TopPanel extends JPanel {
     public JButton nextInstrButton;
     public JTextField xInstrField;
     public JButton runAllButton;
+    public JLabel startIndexLabel, startIndex;
 
     public TopPanel() {
         super(new GridBagLayout());
@@ -20,6 +21,8 @@ public class TopPanel extends JPanel {
         JLabel nextInstrLabel = new JLabel("Run x next instructions");
         runAllButton = new JButton("Run all");
         clockLabel = new JLabel("Clock: " + 0);
+        startIndexLabel = new JLabel("2ndChanceAlgo start index: ");
+        startIndex = new JLabel();
 
         gbc.gridx = 0; gbc.gridy = 0;
         this.add(nextInstrLabel, gbc);
@@ -31,5 +34,10 @@ public class TopPanel extends JPanel {
         this.add(runAllButton, gbc);
         gbc.gridx = 4; gbc.gridy = 0;
         this.add(clockLabel, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        this.add(startIndexLabel, gbc);
+        gbc.gridx = 1; gbc.gridy = 1;
+        this.add(startIndex, gbc);
     }
 }

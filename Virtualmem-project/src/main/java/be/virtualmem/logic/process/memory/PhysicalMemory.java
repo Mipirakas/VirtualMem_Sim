@@ -94,4 +94,8 @@ public class PhysicalMemory {
     public void removeFrame(int pfn) {
         frames.get(pfn).setPage(null);
     }
+
+    public int getAlgoStartIndex() {
+        return algorithm.getStartIndex();
+    }
 }
