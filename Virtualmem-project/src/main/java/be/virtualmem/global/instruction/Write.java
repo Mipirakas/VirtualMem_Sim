@@ -2,6 +2,10 @@ package be.virtualmem.global.instruction;
 
 import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.process.IProcessManager;
+import be.virtualmem.logic.statistics.Statistics;
+import be.virtualmem.logic.statistics.action.IAction;
+import be.virtualmem.logic.statistics.action.Property;
+import be.virtualmem.logic.statistics.action.WriteAction;
 
 public class Write implements IInstruction {
     private int pid;
@@ -16,8 +20,14 @@ public class Write implements IInstruction {
     public void execute(IProcessManager processManager) {
         try {
             processManager.getProcess(pid).getProcessMemory().write(address);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (e.getMessage().equals("Page not mapped yet!")) {
+                processManager.endProcess(pid);
+                IAction action = new WriteAction();
+                action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
+                action.addProperty(Property.PAGE_NOT_MAPPED_ERROR, e.getMessage());
+                Statistics.getInstance().addAction(action);
+            }
         }
     }
 

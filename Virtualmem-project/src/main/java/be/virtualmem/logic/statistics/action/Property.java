@@ -5,7 +5,8 @@ import be.virtualmem.presentation.tui.IPrintTUI;
 public enum Property implements IPrintTUI {
     ACTION_TYPE("Action Type"),
     PHYSICAL_ADDRESS("Physical Address"),
-    VIRTUAL_ADDRESS("Virtual Address");
+    VIRTUAL_ADDRESS("Virtual Address"),
+    PAGE_NOT_MAPPED_ERROR("Page not mapped error");
 
     private final String value;
 

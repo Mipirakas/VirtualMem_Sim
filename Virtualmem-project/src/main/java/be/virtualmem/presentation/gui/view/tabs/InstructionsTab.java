@@ -8,6 +8,7 @@ public class InstructionsTab extends JPanel {
     public JLabel nextInstr;
     public JLabel virtAddrLabel, physAddrLabel;
     public JLabel virtAddr, physAddr;
+    public JLabel pageNotMapped;
 
     public InstructionsTab() {
         super(new GridBagLayout());
@@ -17,6 +18,8 @@ public class InstructionsTab extends JPanel {
         physAddrLabel = new JLabel("Physical address: ");
         virtAddr = new JLabel();
         physAddr = new JLabel();
+        pageNotMapped = new JLabel("Page Not Mapped!!!");
+        pageNotMapped.setForeground(Color.RED);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10);
@@ -46,5 +49,8 @@ public class InstructionsTab extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 3;
         this.add(physAddr, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        this.add(pageNotMapped, gbc);
     }
 }

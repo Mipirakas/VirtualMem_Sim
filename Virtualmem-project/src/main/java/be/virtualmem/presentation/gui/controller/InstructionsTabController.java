@@ -32,9 +32,11 @@ public class InstructionsTabController {
 
             tab.virtAddr.setText(action.getPropertyStringMap().get(Property.VIRTUAL_ADDRESS));
             tab.physAddr.setText(action.getPropertyStringMap().get(Property.PHYSICAL_ADDRESS));
+            tab.pageNotMapped.setVisible(action.getPropertyStringMap().containsKey(Property.PAGE_NOT_MAPPED_ERROR));
             setRWExtraVisible(true);
         } else {
             setRWExtraVisible(false);
+            tab.pageNotMapped.setVisible(false);
         }
     }
 
