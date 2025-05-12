@@ -1,6 +1,7 @@
 package be.virtualmem.presentation.gui.controller;
 
 import be.virtualmem.logic.System;
+import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
 import be.virtualmem.presentation.gui.view.tabs.PhysicalFramesTab;
 
@@ -10,7 +11,7 @@ public class PhysicalFramesTabController {
     private System system;
     private PhysicalFramesTab tab;
     private DefaultTableModel model;
-    private final String[] columns = {"Frame", "PID", "Virtual address"};
+    private final String[] columns = {"Frame", "PID", "Virtual address", "Accessed?", "Dirty?"};
 
     public PhysicalFramesTabController(PhysicalFramesTab physicalFramesTab, System system) {
         this.system = system;
@@ -22,10 +23,16 @@ public class PhysicalFramesTabController {
 
     public void update() {
         Object[][] data = PhysicalMemory.getInstance().getFrames().entrySet().stream()
-                .map(e -> new Object[]{
+                .map(e -> {
+                    Page page = e.getValue().getPage();
+
+                    return new Object[]{
                         e.getKey(),
                         e.getValue().getPid() == 0 ? null : e.getValue().getPid(),
-                        e.getValue().getPage() == null ? null : e.getValue().getPage().getAddress().getAsHex()
+                        page == null ? null : page.getAddress().getAsHex(),
+                        page == null ? null : page.getAccessed(),
+                        page == null ? null : page.getDirty()
+                    };
                 }).toArray(Object[][]::new);
         model.setDataVector(data, columns);
     }
