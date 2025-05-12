@@ -130,7 +130,8 @@ public class ProcessMemory {
     }
 
     public void free() {
-        // Free memory
+        PhysicalMemory.getInstance().removePID(pid);
+        BackingStore.getInstance().removePID(pid);
     }
     public PageTableStructure getPageTableStructure() {
         return pageTableStructure;

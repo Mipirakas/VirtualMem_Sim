@@ -10,6 +10,7 @@ import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -74,5 +75,19 @@ public class PhysicalMemory {
             return frame.get().getPage();
         else
             throw new Exception("Page Fault was thrown");
+    }
+
+    public void removePID(int pid) {
+        List<Integer> framesToRemove = frames.entrySet().stream()
+                .filter(e -> e.getValue().getPid() == pid)
+                .map(Map.Entry::getKey).toList();
+
+        removeFrames(framesToRemove);
+    }
+
+    public void removeFrames(List<Integer> idList) {
+        for (Integer id : idList) {
+            frames.get(id).setPage(null);
+        }
     }
 }

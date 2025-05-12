@@ -133,6 +133,7 @@ public class PageTableStructure {
 
                             // pte moet bestaan, maar is toch null
                             // idk waar de fout zit
+                            // Als page in frame zit, haal page uit frame
                             if (pte != null && pte.getPfn() != null) {
                                 page.pageOut();
                                 PhysicalMemory.getInstance().getFrames().get(pte.getPfn()).setPage(null);

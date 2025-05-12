@@ -17,7 +17,7 @@ public class Process {
     }
 
     public void end(){
-        processMemory.free(); // Free all memory this process allocated
+        processMemory.free();
     }
 
 }

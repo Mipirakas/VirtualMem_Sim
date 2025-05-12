@@ -19,7 +19,7 @@ public class BackingStore {
     }
 
     public void addPage(Integer pid, Address address, Page page) {
-        backingStores.computeIfAbsent(pid, k -> new HashMap<>());
+        backingStores.putIfAbsent(pid, new HashMap<>());
         backingStores.get(pid).put(address, page);
     }
 
@@ -32,6 +32,10 @@ public class BackingStore {
         if (!backingStores.containsKey(pid))
             return null;
         return backingStores.get(pid).get(address);
+    }
+
+    public void removePID(Integer pid) {
+        backingStores.remove(pid);
     }
 
     public Map<Integer, Map<Address, Page>> getBackingStores() {
