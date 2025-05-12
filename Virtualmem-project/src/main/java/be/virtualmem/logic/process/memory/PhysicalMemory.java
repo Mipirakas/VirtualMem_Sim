@@ -85,9 +85,13 @@ public class PhysicalMemory {
         removeFrames(framesToRemove);
     }
 
-    public void removeFrames(List<Integer> idList) {
-        for (Integer id : idList) {
-            frames.get(id).setPage(null);
+    public void removeFrames(List<Integer> pfnList) {
+        for (Integer pfn : pfnList) {
+            removeFrame(pfn);
         }
+    }
+
+    public void removeFrame(int pfn) {
+        frames.get(pfn).setPage(null);
     }
 }

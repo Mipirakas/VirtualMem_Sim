@@ -45,7 +45,7 @@ public class PageTableStructure {
         // Also create necessary Page Table Directories
         for (Page page : list) {
             // Possible cleaner implementation
-            /*IPageTable pageTable = baseTable;
+/*            IPageTable pageTable = baseTable;
 
             for (int i = 0; i < levels; i++) {
                 Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
@@ -57,11 +57,6 @@ public class PageTableStructure {
 
                     if (i < levels - 1) {
                         pageDirectoryEntry = (PageDirectoryEntry) pageEntry;
-                        if (pageDirectoryEntry == null) {
-                            System.out.println("wtfff");
-                            System.out.println(i);
-                            System.out.println(pageEntry.getClass().getSimpleName());
-                        }
                         pageTable = pageDirectoryEntry.getPointer();
 
                         if (pageTable == null) {
@@ -99,11 +94,11 @@ public class PageTableStructure {
                     }
                 }
 
-
                 // If page table does not exist, create one
                 if (pageTable == null && pageDirectoryEntry != null) {
                     // If the page table is the last level, it should use page table entries and not page directory entries
-                    PageTable pageTableToAdd = new PageTable(i + 1, i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
+                    PageTable pageTableToAdd = new PageTable(i + 1,
+                            i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
                     pageTable = pageTableToAdd;
                     pageDirectoryEntry.setPointer(pageTableToAdd);
                 }
@@ -136,7 +131,7 @@ public class PageTableStructure {
                             // Als page in frame zit, haal page uit frame
                             if (pte != null && pte.getPfn() != null) {
                                 page.pageOut();
-                                PhysicalMemory.getInstance().getFrames().get(pte.getPfn()).setPage(null);
+                                PhysicalMemory.getInstance().removeFrame(pte.getPfn());
                             }
 
                             pageTable.removeEntry(pageTableOffset);
