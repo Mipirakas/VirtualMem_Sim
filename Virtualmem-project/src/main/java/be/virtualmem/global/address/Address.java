@@ -79,8 +79,7 @@ public class Address {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Address) {
-            Address address = (Address) obj;
+        if (obj instanceof Address address) {
             return bits.equals(address.getBits());
         }
         return false;
