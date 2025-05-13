@@ -5,6 +5,7 @@ import be.virtualmem.global.Constants;
 import java.util.Arrays;
 
 public class AddressTranslator {
+    private AddressTranslator() {}
     public static Long fromAddressToPageTableLevelEntryId(Address address, int level) {
         Long pageTableEntryId = null;
         if (level >= 0 && level < Constants.PAGE_TABLE_ENTRIES.length) {

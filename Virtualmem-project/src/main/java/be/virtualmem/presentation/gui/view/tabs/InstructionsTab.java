@@ -6,8 +6,10 @@ import java.awt.*;
 public class InstructionsTab extends JPanel {
     public JLabel prevInstr;
     public JLabel nextInstr;
-    public JLabel virtAddrLabel, physAddrLabel;
-    public JLabel virtAddr, physAddr;
+    public JLabel virtAddrLabel;
+    public JLabel physAddrLabel;
+    public JLabel virtAddr;
+    public JLabel physAddr;
     public JLabel pageNotMapped;
 
     public InstructionsTab() {

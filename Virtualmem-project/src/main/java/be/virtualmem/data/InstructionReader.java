@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class InstructionReader {
+    private InstructionReader() {}
     public static Queue<IInstruction> readFromFile(String path) {
         Queue<IInstruction> instructions = new LinkedList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {

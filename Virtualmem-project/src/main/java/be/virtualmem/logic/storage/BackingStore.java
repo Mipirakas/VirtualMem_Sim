@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BackingStore {
-    private final static BackingStore instance = new BackingStore();
+    private static final BackingStore instance = new BackingStore();
     Map<Integer, Map<Address, Page>> backingStores;
 
     private BackingStore() {

@@ -1,14 +1,13 @@
 package be.virtualmem.presentation.tui;
 
 
-import be.virtualmem.logic.statistics.action.Property;
 import be.virtualmem.presentation.tui.visuals.TableChars;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class PrettyPrinter {
+    private PrettyPrinter() {}
     private static String stringFormatting(String string, int maxLength) {
         if (maxLength < 3)
             throw new IllegalArgumentException("Length must be at least 3");
@@ -85,8 +84,8 @@ public class PrettyPrinter {
         for  (Map.Entry<E, T> entry : structure.entrySet()) {
             String val1 = entry.getKey().toString();
             String val2 = "";
-            if (entry.getValue() instanceof IPrintTUI)
-                val2 = ((IPrintTUI) entry.getValue()).print();
+            if (entry.getValue() instanceof IPrintTUI printTUI)
+                val2 = printTUI.print();
             else
                 val2 = entry.getValue().toString();
 

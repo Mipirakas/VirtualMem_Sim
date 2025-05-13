@@ -16,7 +16,7 @@ public class Address {
         this.bits = new LinkedHashSet<>(address.getBits());
     }
 
-    public LinkedHashSet<Integer> getBits() {
+    public Set<Integer> getBits() {
         return bits;
     }
 

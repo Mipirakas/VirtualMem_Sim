@@ -1,6 +1,7 @@
 package be.virtualmem.global;
 
 public class Constants {
+    private Constants() {}
     public static final int[] PAGE_TABLE_ENTRIES = new int[]{9, 9, 9, 9}; // 2^9, 2^9, 2^9, 2^9
     public static final int ADDRESS_OFFSET_BITS = 12;
     public static final int ADDRESS_UNUSED_BITS = 16;

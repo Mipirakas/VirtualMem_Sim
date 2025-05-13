@@ -16,6 +16,10 @@ public class Process {
         return processMemory;
     }
 
+    public int getPid() {
+        return pid;
+    }
+
     public void end(){
         processMemory.free();
     }
