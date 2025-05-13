@@ -9,47 +9,44 @@ import java.util.TreeMap;
 
 public class SecondChanceAlgorithm implements IAlgorithm {
     private TreeMap<Integer, Frame> frames;
-    private int startIndex;
+    private ReorderingSet<Integer> reorderingSet;
 
     public SecondChanceAlgorithm(Map<Integer, Frame> frames) {
         this.frames = new TreeMap<>(frames);
-        startIndex = 0;
+        reorderingSet = new ReorderingSet<>();
     }
 
     public int getStartIndex() {
-        return startIndex;
+        return reorderingSet.peek() == null ? 0 : reorderingSet.peek();
     }
 
     public Integer frameIdToReallocate() {
         // Check if a frame has no pages
         for (Entry<Integer, Frame> entry : frames.entrySet())
-            if (entry.getValue().getPage() == null)
+            if (entry.getValue().getPage() == null) {
+                reorderingSet.add(entry.getKey());
                 return entry.getKey();
+            }
 
         // Create states, no frame with null values
         Map<Integer, PageState> states = new LinkedHashMap<>();
 
         // First: process entries from startIndex and up
-        for (Entry<Integer, Frame> entry : frames.tailMap(startIndex).entrySet()) {
+        for (Entry<Integer, Frame> entry : frames.tailMap(reorderingSet.peek()).entrySet()) {
             states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
         }
 
         // Then: process entries before startIndex
-        for (Entry<Integer, Frame> entry : frames.headMap(startIndex).entrySet()) {
+        for (Entry<Integer, Frame> entry : frames.headMap(reorderingSet.peek()).entrySet()) {
             states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
         }
 
-        return frameLoop(states);
-    }
+        // Works worse?
+        /*for (Integer i : reorderingSet.toSet()) {
+            states.put(i, new PageState(frames.get(i).getPage()));
+        }*/
 
-    private void updateStartIndex(int offset) {
-        int nextIndex = startIndex + offset;
-        if (nextIndex < 0)
-            startIndex = 0;
-        else if (nextIndex >= frames.size())
-            startIndex = nextIndex - frames.size();
-        else
-            startIndex = nextIndex;
+        return frameLoop(states);
     }
 
     private Integer frameLoop(Map<Integer, PageState> states) {
@@ -61,13 +58,12 @@ public class SecondChanceAlgorithm implements IAlgorithm {
 
                 switch (getClass(pageState)) {
                     case 0:
-                        updateStartIndex(offset);
+                        reorderingSet.add(offset);
                         return state.getKey();
                     case 1:
                         state.getValue().requestCopy().setDirty(0); break;
                     // If class is 2 or 3 set accesed to 0
-                    case 2:
-                    case 3:
+                    case 2, 3:
                         state.getValue().setAccessed(0); break;
                     default:
                         throw new IllegalStateException("Unexpected class value: " + getClass(pageState));

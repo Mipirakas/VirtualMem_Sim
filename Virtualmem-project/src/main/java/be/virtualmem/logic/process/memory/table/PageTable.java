@@ -21,15 +21,11 @@ public class PageTable implements IPageTable {
     }
 
     public IPageEntry getEntry(Long id) {
-        if (id >= 0 && id < pageTableSize) {
-            return entries.get(id);
-        }
-        return null;
+        return entries.get(id);
     }
 
     public void addEntry(Long id) {
-        if (!entries.containsKey(id) || entries.get(id) == null)
-            entries.put(id, pageEntrySupplier.get());
+        entries.putIfAbsent(id, pageEntrySupplier.get());
     }
 
     public void removeEntry(Long id) {

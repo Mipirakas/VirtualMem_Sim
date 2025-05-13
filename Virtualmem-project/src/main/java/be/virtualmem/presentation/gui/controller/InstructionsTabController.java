@@ -18,6 +18,7 @@ public class InstructionsTabController {
         this.tab = instructionsTab;
         nextInstruction = system.getInstructionManager().getNextInstruction();
         tab.nextInstr.setText(nextInstruction.print());
+        tab.pageNotMapped.setVisible(false);
         setRWExtraVisible(false);
     }
 
