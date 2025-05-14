@@ -1,5 +1,6 @@
 package be.virtualmem.presentation.gui.controller;
 
+import be.virtualmem.logic.SystemClock;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
 import be.virtualmem.presentation.gui.view.components.TopPanel;
 
@@ -34,14 +35,14 @@ public class TopPanelController {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Please enter a number!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        topPanel.clockLabel.setText("Clock: " + system.getClock());
+        topPanel.clockLabel.setText("Clock: " + SystemClock.getInstance().getTime());
         topPanel.startIndex.setText("" + PhysicalMemory.getInstance().getAlgoStartIndex());
         mainController.runButtonAction();
     }
 
     private void runAllInstructions() {
         system.runAllInstructions();
-        topPanel.clockLabel.setText("Clock: " + system.getClock());
+        topPanel.clockLabel.setText("Clock: " + SystemClock.getInstance().getTime());
         topPanel.startIndex.setText("" + PhysicalMemory.getInstance().getAlgoStartIndex());
         mainController.runButtonAction();
     }

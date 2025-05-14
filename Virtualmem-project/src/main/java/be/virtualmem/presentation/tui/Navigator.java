@@ -6,6 +6,7 @@ import be.virtualmem.global.instruction.IInstruction;
 import be.virtualmem.global.instruction.Read;
 import be.virtualmem.global.instruction.Write;
 import be.virtualmem.global.process.Process;
+import be.virtualmem.logic.SystemClock;
 import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.Frame;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
@@ -176,6 +177,6 @@ public class Navigator {
     }
 
     private void showClock() {
-        System.out.println("Current clock: " + system.getClock());
+        System.out.println("Current clock: " + SystemClock.getInstance().getTime());
     }
 }

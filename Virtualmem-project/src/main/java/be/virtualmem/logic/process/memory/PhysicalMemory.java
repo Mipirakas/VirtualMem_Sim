@@ -3,7 +3,6 @@ package be.virtualmem.logic.process.memory;
 
 import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
-import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
 import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
 import be.virtualmem.logic.statistics.Statistics;
@@ -66,13 +65,13 @@ public class PhysicalMemory {
         return frames;
     }
 
-    public Page getPage(int pid, Address address) throws Exception {
+    public Page accessPage(int pid, Address address) throws Exception {
         Optional<Frame> frame = frames.values().stream()
                 .filter(e -> e.getPid() == pid && e.getPage().getAddress().equals(address))
                 .findFirst();
 
         if (frame.isPresent())
-            return frame.get().getPage();
+            return frame.get().accessPage();
         else
             throw new Exception("Page Fault was thrown");
     }

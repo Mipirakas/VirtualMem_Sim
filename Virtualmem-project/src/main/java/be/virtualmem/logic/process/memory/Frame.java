@@ -1,15 +1,28 @@
 package be.virtualmem.logic.process.memory;
 
+import be.virtualmem.global.Constants;
+import be.virtualmem.logic.SystemClock;
 import be.virtualmem.presentation.tui.IPrintTUI;
 
 public class Frame implements IPrintTUI {
     private Page page = null;
     private int pid;
+    private int frequency = 0;
+    private int setAtClock = 0;
+    private int maxFrequency;
 
-    public Frame() {}
+    public Frame() {
+        maxFrequency = Constants.SECOND_CHANCE_MAX_FREQUENCY;
+    }
 
     public Frame(Page page) {
         this.page = page;
+        maxFrequency = Constants.SECOND_CHANCE_MAX_FREQUENCY;
+    }
+
+    public Page accessPage() {
+        incrementFrequency();
+        return page;
     }
 
     public Page getPage() {
@@ -20,6 +33,10 @@ public class Frame implements IPrintTUI {
         this.page = page;
         if (page == null)
             pid = 0;
+
+        // reset frequency and age
+        frequency = 1;
+        setAtClock = SystemClock.getInstance().getTime();
     }
 
     public int getPid() {
@@ -28,6 +45,20 @@ public class Frame implements IPrintTUI {
 
     public void setPid(int pid) {
         this.pid = pid;
+    }
+
+    public void incrementFrequency() {
+        if (frequency > maxFrequency)
+            frequency = 0; // Will result in page being swapped out
+        frequency++;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int calculateAge() {
+        return SystemClock.getInstance().getTime() - setAtClock;
     }
 
     @Override
