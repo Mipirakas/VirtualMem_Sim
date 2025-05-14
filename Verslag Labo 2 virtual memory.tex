@@ -1,0 +1,59 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[dutch]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{nameref}
+
+\title{Labo 2 - Virtual Memory}
+\author{Boris Michiels, Anthony Tacquet}
+\date{april 2025}
+
+\pagestyle{fancy}
+\setlength{\headheight}{15pt}
+\fancyhead{}
+\fancyhead[L]{\textbf{Labo 2 - Virtual memory}}
+\fancyfoot{}
+\fancyfoot[L]{2024-2025}
+\fancyfoot[C]{Boris Michiels, Anthony Tacquet}
+\fancyfoot[R]{\thepage}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Java code}
+Onze java-code is opnieuw opgesplitst in 3 algemene packages: \textit{data}, \textit{globals} en \textit{presentatie}. Al onze constanten die bepalen hoe onze \textit{gesimuleerde machine} eruitziet, bevinden zich in het \textit{Constants.java} bestand. Onze code werd zo geschreven om makkelijk uitbreidbaar te zijn; ook zou de code moeten werken als andere waarden ingesteld worden in het \textit{Constants.java} bestand voor bijvoorbeeld \textit{Page Table Entries} en \textit{Address Offset Bits}.
+
+
+\section{Reallocatie-algoritme}
+\subsection{Second Chance Algorithm}
+
+Ons reallocatie-algoritme bestaat uit een combinatie van het \textit{Second Chance} algoritme en het \textit{Least Recenttly Used (LRU)} algoritme. Het algoritme gaat grotendeels te werk zoals het \textit{Second Chance} algoritme, maar zal als startindex voor het zoeken van een geschikte frame altijd beginnen met itereren bij de frame die al het langste in het geheugen zit. We noemen dit algoritme dan ook het \textit{Aged Second Chance (ASC)} algoritme.
+
+\subsection{Weighted Aged Frequency (WAF) Algorithm}
+In dit algoritme worden voor elk frame enkele extra waarden bijgehouden.
+\begin{itemize}
+    \item \textit{frequency}: aantal keer dat er naar deze pagina gelezen/geschreven wordt;
+    \item \textit{clock}: wanneer deze page voor het eerst in het geheugen werd geladen.
+\end{itemize}
+
+Aan de hand van deze waarden kan het algoritme een soort van verhouding berekenen per frame, en zo een \textit{victim} selecteren. De \textit{victim} die gekozen wordt zal vanzelfsprekend uit het geheugen gehaald worden om plaats te maken voor een nieuwe pagina.
+
+\[
+cost = \frac{age}{frequency + weight \cdot dirty}
+\]
+
+Age wordt bepaald uit hoe lang een pagina al in het geheugen zit en kan dus bepaald worden door de waarde van de \textit{clock} af te trekken van de huidige \textit{clock}.
+
+\textit{Weight} is een parameter die ingesteld kan worden, hoe hoger men \textit{weight} instelt hoe meer dat de waarde van de \textit{dirty bit} zal doorwegen. Dit betekent dus ook dat pagina's waar naar geschreven is geweest minder vaak zullen uitgeswapt worden (de \textit{page outs} zal verminderen).
+
+\section{Statistieken}
+Onze code bevat statistieken voor alle \textit{page ins}, \textit{page outs} en \textit{page evictions} zoals in de opgave gevraagd wordt. In de TUI kan men ook het aantal \textit{page faults} opvragen; het aantal \textit{page faults} zal altijd gelijk zijn aan het aantal \textit{page ins}.
+
+\section{Besluit}
+Ons project is voorzien van een GUI en een TUI, we hebben een combinatie gebruikt van bestaande reallocatie-algoritmen als inspiratie voor ons eigen reallocatie-algoritme en een eigen algoritme uitgevonden voor het aantal \textit{page outs} te minimaliseren.
+
+\end{document}
