@@ -44,8 +44,7 @@ public class PageTableStructure {
     public void mapPageTables(List<Page> list) {
         // Also create necessary Page Table Directories
         for (Page page : list) {
-            // Possible cleaner implementation
-/*            IPageTable pageTable = baseTable;
+            IPageTable pageTable = baseTable;
 
             for (int i = 0; i < levels; i++) {
                 Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
@@ -60,47 +59,13 @@ public class PageTableStructure {
                         pageTable = pageDirectoryEntry.getPointer();
 
                         if (pageTable == null) {
-                            PageTable pageTableToAdd = null;
-
-                            if (i < levels - 2) {
-                                pageTableToAdd = new PageTable(i + 1, PageDirectoryEntry::new);
-                            } else if (i == levels - 2) {
-                                pageTableToAdd = new PageTable(i + 1, PageTableEntry::new);
-                            }
+                            PageTable pageTableToAdd = new PageTable(i + 1,
+                                    i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
 
                             pageDirectoryEntry.setPointer(pageTableToAdd);
                             pageTable = pageTableToAdd;
                         }
                     }
-                }
-            }*/
-
-            IPageTable pageTable = baseTable;
-
-            // Map page per page (can be done more efficiently)
-            // 1 because base table is counted as the first level
-            // Rethink method of page tables
-            for (int i = 0; i < levels; i++) {
-                Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
-                PageDirectoryEntry pageDirectoryEntry = null;
-
-                if (pageTableOffset != null) {
-                    pageTable.addEntry(pageTableOffset);
-                    IPageEntry pageEntry = pageTable.getEntry(pageTableOffset);
-
-                    if (pageEntry instanceof PageDirectoryEntry) {
-                        pageDirectoryEntry = (PageDirectoryEntry) pageEntry;
-                        pageTable = pageDirectoryEntry.getPointer();
-                    }
-                }
-
-                // If page table does not exist, create one
-                if (pageTable == null && pageDirectoryEntry != null) {
-                    // If the page table is the last level, it should use page table entries and not page directory entries
-                    PageTable pageTableToAdd = new PageTable(i + 1,
-                            i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
-                    pageTable = pageTableToAdd;
-                    pageDirectoryEntry.setPointer(pageTableToAdd);
                 }
             }
         }
@@ -126,10 +91,8 @@ public class PageTableStructure {
                         if (i == levels - 1) {
                             PageTableEntry pte = (PageTableEntry) pageTable.getEntry(pageTableOffset);
 
-                            // pte moet bestaan, maar is toch null
-                            // idk waar de fout zit
                             // Als page in frame zit, haal page uit frame
-                            if (pte != null && pte.getPfn() != null) {
+                            if (pte.getPfn() != null) {
                                 page.pageOut();
                                 PhysicalMemory.getInstance().removeFrame(pte.getPfn());
                             }
@@ -138,13 +101,14 @@ public class PageTableStructure {
                         } else {
                             PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableOffset);
 
+                            // pde zou nooit null mogen zijn maar is dat toch??
                             if (pde != null) {
                                 PageTable pt = (PageTable) pde.getPointer();
 
                                 if (pt != null && pt.getNrOfEntries() == 0) {
                                     pageTable.removeEntry(pageTableOffset);
                                 }
-                            }
+                            } //else System.out.println("ohno");
                         }
                     }
                 }

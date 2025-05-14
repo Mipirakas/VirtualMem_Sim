@@ -1,7 +1,5 @@
 package be.virtualmem.logic.process.memory.entry;
 
-import be.virtualmem.presentation.tui.IPrintTUI;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
