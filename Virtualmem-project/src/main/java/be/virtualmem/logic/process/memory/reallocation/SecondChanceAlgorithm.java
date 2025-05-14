@@ -1,52 +1,52 @@
 package be.virtualmem.logic.process.memory.reallocation;
 
-import be.virtualmem.global.Constants;
 import be.virtualmem.logic.process.memory.Frame;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.TreeMap;
 
 public class SecondChanceAlgorithm implements IAlgorithm {
     private TreeMap<Integer, Frame> frames;
-    private int weight;
+    private ReorderingSet<Integer> reorderingSet;
 
     public SecondChanceAlgorithm(Map<Integer, Frame> frames) {
         this.frames = new TreeMap<>(frames);
-        this.weight = Constants.SECOND_CHANCE_WEIGHT;
+        reorderingSet = new ReorderingSet<>();
     }
 
     public int getStartIndex() {
-        return 0;
-    }
-
-    private int calculateVictim() {
-        int victim= 0;
-        int highestCost = 0;
-
-        for (Entry<Integer, Frame> entry : frames.entrySet()) {
-            Frame frame = entry.getValue();
-            int cost = (frame.calculateAge()) / (frame.getFrequency() + weight * frame.getPage().getDirty());
-
-            if (cost > highestCost) {
-                highestCost = cost;
-                victim = entry.getKey();
-            }
-        }
-
-        return victim;
+        return reorderingSet.peek() == null ? 0 : reorderingSet.peek();
     }
 
     public Integer frameIdToReallocate() {
         // Check if a frame has no pages
         for (Entry<Integer, Frame> entry : frames.entrySet())
             if (entry.getValue().getPage() == null) {
+                reorderingSet.add(entry.getKey());
                 return entry.getKey();
             }
 
-        return calculateVictim();
+        // Create states, no frame with null values
+        Map<Integer, PageState> states = new LinkedHashMap<>();
+
+        // First: process entries from startIndex and up
+        for (Entry<Integer, Frame> entry : frames.tailMap(reorderingSet.peek()).entrySet()) {
+            states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
+        }
+
+        // Then: process entries before startIndex
+        for (Entry<Integer, Frame> entry : frames.headMap(reorderingSet.peek()).entrySet()) {
+            states.put(entry.getKey(), new PageState(entry.getValue().getPage()));
+        }
+
+        // Works worse?
+        /*for (Integer i : reorderingSet.toSet()) {
+            states.put(i, new PageState(frames.get(i).getPage()));
+        }*/
+
+        return frameLoop(states);
     }
 
     private Integer frameLoop(Map<Integer, PageState> states) {
@@ -58,6 +58,7 @@ public class SecondChanceAlgorithm implements IAlgorithm {
 
                 switch (getClass(pageState)) {
                     case 0:
+                        reorderingSet.add(offset);
                         return state.getKey();
                     case 1:
                         state.getValue().requestCopy().setDirty(0); break;
