@@ -26,7 +26,7 @@ public class PageDirectoryEntry implements IPageEntry {
         this.present = (byte) 0;
     }
 
-    public PageTable getPointer() {
+    public PageTable getPageTable() {
         return pointer;
     }
 

@@ -4,7 +4,6 @@ import be.virtualmem.global.address.Address;
 import be.virtualmem.global.address.AddressTranslator;
 import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
-import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 
@@ -44,7 +43,7 @@ public class PageTableStructure {
 
                     if (i < levels - 1) {
                         PageDirectoryEntry pageDirectoryEntry = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
-                        pageTable = pageDirectoryEntry.getPointer();
+                        pageTable = pageDirectoryEntry.getPageTable();
 
                         // If pagetable does not exist yet make the page table
                         if (pageTable == null) {
@@ -90,7 +89,7 @@ public class PageTableStructure {
                     Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), depth);
                     PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
 
-                    if (pde != null && pde.getPointer().isEmpty()) {
+                    if (pde != null && pde.getPageTable().isEmpty()) {
                         pageTable.removeEntry(pageTableIndex);
                     }
                 }
@@ -105,7 +104,7 @@ public class PageTableStructure {
             Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
 
             if (pageTableIndex != null) {
-                pageTable = ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex)).getPointer();
+                pageTable = ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex)).getPageTable();
 
                 if (pageTable == null) return null;
             }
