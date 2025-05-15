@@ -31,10 +31,10 @@ public class PageTableStructure {
             if (pageTableOffset != null && pageTable != null) {
                 IPageEntry pageEntry = pageTable.getEntry(pageTableOffset);
 
-                if (pageEntry instanceof PageDirectoryEntry)
-                    pageTable = ((PageDirectoryEntry) pageEntry).getPointer();
-                else if (pageEntry instanceof PageTableEntry)
-                    pageTableEntry = (PageTableEntry) pageEntry;
+                if (pageEntry instanceof PageDirectoryEntry pde)
+                    pageTable = pde.getPointer();
+                else if (pageEntry instanceof PageTableEntry pte)
+                    pageTableEntry = pte;
             }
         }
 
@@ -48,14 +48,12 @@ public class PageTableStructure {
 
             for (int i = 0; i < levels; i++) {
                 Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
-                PageDirectoryEntry pageDirectoryEntry;
 
                 if (pageTableIndex != null) {
                     pageTable.addEntry(pageTableIndex);
-                    IPageEntry pageEntry = pageTable.getEntry(pageTableIndex);
 
                     if (i < levels - 1) {
-                        pageDirectoryEntry = (PageDirectoryEntry) pageEntry;
+                        PageDirectoryEntry pageDirectoryEntry = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
                         pageTable = pageDirectoryEntry.getPointer();
 
                         if (pageTable == null) {
