@@ -60,7 +60,6 @@ public class PageTableStructure {
                         if (pageTable == null) {
                             PageTable pageTableToAdd = new PageTable(i + 1,
                                     i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
-
                             pageDirectoryEntry.setPointer(pageTableToAdd);
                             pageTable = pageTableToAdd;
                         }
@@ -76,15 +75,14 @@ public class PageTableStructure {
         // First, remove all the PTEs on the lowest levels (the last tables)
         // Next, go from the second-lowest level to the highest level and check on each level
         // if the page table below it is empty and remove it accordingly
-        for (int j = levels; j > 0; j--) {
+        for (int depth = levels; depth > 0; depth--) {
             for (Page page : list) {
-                Address address = page.getAddress();
                 pageTable = baseTable;
 
-                for (int i = 0; i < j; i++) {
-                    Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+                for (int i = 0; i < depth; i++) {
+                    Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
 
-                    if (i < j - 1) {
+                    if (i < depth - 1) {
                         pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
                     } else {
                         if (i == levels - 1) {
@@ -104,10 +102,10 @@ public class PageTableStructure {
                             if (pde != null) {
                                 PageTable pt = (PageTable) pde.getPointer();
 
-                                if (pt != null && pt.getNrOfEntries() == 0) {
+                                if (pt != null && pt.isEmpty()) {
                                     pageTable.removeEntry(pageTableOffset);
                                 }
-                            } //else System.out.println("ohno");
+                            }
                         }
                     }
                 }
