@@ -68,6 +68,7 @@ public class Statistics {
         map.put("pageOutCount", pageOutCount);
         map.put("pageEvictionCount", pageEvictionCount);
         map.put("pageFaultCount", pageFaultCount);
+        map.put("rwCount", getAmountOfRWActions()) ;
         return map;
     }
 }

@@ -21,5 +21,6 @@ public class StatisticsTabController {
         tab.pageInLabel.setText("# page ins: " + data.get("pageInCount"));
         tab.pageEvictionLabel.setText("# page evictions: " + data.get("pageEvictionCount"));
         tab.pageOutLabel.setText("# page outs: " + data.get("pageOutCount"));
+        tab.rwLabel.setText("# read-write actions: " + data.get("rwCount"));
     }
 }

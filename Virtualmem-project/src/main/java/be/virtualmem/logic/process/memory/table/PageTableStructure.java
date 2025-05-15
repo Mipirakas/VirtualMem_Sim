@@ -13,7 +13,6 @@ import java.util.*;
 public class PageTableStructure {
     private PageTable baseTable;
     private int levels;
-    // for debugggggggg
 
     public PageTableStructure(int levels) {
         // Create initial page table for a process
