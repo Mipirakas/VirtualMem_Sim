@@ -33,7 +33,7 @@ public class ProcessMemory {
 
         try {
             // Try to get page from physical memory
-            page = PhysicalMemory.getInstance().getPage(pid, pageAddress);
+            page = PhysicalMemory.getInstance().accessPage(pid, pageAddress);
         } catch (Exception e) {
             Statistics.getInstance().incrementPageFaultCount();
         }

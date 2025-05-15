@@ -5,7 +5,6 @@ import be.virtualmem.logic.process.ProcessManager;
 public class System implements ISystemContext {
     private ProcessManager processManager;
     private InstructionManager instructionManager;
-    private int clock;
 
     // parameter: reallocation algorithm
     public System() {
@@ -14,14 +13,13 @@ public class System implements ISystemContext {
 
     public void boot(){
         // Add the instructions
-        clock = 0;
         processManager = ProcessManager.getInstance();
         instructionManager = new InstructionManager(processManager);
     }
 
     // run next instruction
     public void run(){
-        clock++;
+        SystemClock.getInstance().tick();
         instructionManager.executeNextInstruction();
     }
 
@@ -44,9 +42,5 @@ public class System implements ISystemContext {
 
     public boolean hasFinished() {
         return instructionManager.hasFinished();
-    }
-
-    public int getClock() {
-        return clock;
     }
 }

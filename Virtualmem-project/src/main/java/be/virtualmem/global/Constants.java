@@ -16,4 +16,7 @@ public class Constants {
     public static final String FEW_INSTRUCTION_DATASET = "datasets/few_instructions.txt";
     public static final String RESULTS_DIR = "results/";
 
+    public static final int SECOND_CHANCE_WEIGHT = 25;
+    public static final int SECOND_CHANCE_MAX_FREQUENCY = 500;
+
 }
