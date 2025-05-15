@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class PageTable implements IPageTable {
+public class PageTable {
     private Map<Long, IPageEntry> entries;
     private int level;
     private int pageTableSize;
