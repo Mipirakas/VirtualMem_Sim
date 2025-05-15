@@ -12,12 +12,12 @@ public class Frame implements IPrintTUI {
     private int maxFrequency;
 
     public Frame() {
-        maxFrequency = Constants.SECOND_CHANCE_MAX_FREQUENCY;
+        maxFrequency = Constants.WAF_MAX_FREQUENCY;
     }
 
     public Frame(Page page) {
         this.page = page;
-        maxFrequency = Constants.SECOND_CHANCE_MAX_FREQUENCY;
+        maxFrequency = Constants.WAF_MAX_FREQUENCY;
     }
 
     public Page accessPage() {
