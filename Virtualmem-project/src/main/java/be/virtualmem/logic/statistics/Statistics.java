@@ -53,6 +53,15 @@ public class Statistics {
         return null;
     }
 
+    public int getAmountOfRWActions() {
+        int count = 0;
+        for (IAction action : actions) {
+            if (action.getActionType() == ActionType.READ || action.getActionType() == ActionType.WRITE)
+                count++;
+        }
+        return count;
+    }
+
     public Map<String, Integer> map() {
         Map<String, Integer> map = new HashMap<>();
         map.put("pageInCount", pageInCount);

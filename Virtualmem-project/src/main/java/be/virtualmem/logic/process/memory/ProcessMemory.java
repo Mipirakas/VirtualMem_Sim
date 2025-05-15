@@ -94,8 +94,8 @@ public class ProcessMemory {
     }
 
     public void map(Address address, int size) {
-        List<Page> pagesToAdd = new ArrayList<>();
         int requiredPages = size / (int) Math.pow(2, Constants.PAGE_SIZE);
+        List<Page> pagesToAdd = new ArrayList<>(requiredPages);
 
         for (int i = 0; i < requiredPages; i++) {
             Address addressToAdd = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));
@@ -108,8 +108,8 @@ public class ProcessMemory {
     }
 
     public void unmap(Address address, int size) {
-        List<Page> pagesToRemove = new ArrayList<>();
         int requiredPages = size / (int) Math.pow(2, Constants.PAGE_SIZE);
+        List<Page> pagesToRemove = new ArrayList<>(requiredPages);
 
         for (int i = 0; i < requiredPages; i++) {
             Address addressToRemove = Address.offsetAddress(address, (int) (i * Math.pow(2, Constants.PAGE_SIZE)));

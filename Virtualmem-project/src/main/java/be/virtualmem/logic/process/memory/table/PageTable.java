@@ -37,11 +37,7 @@ public class PageTable implements IPageTable {
     }
 
     public boolean isEmpty() {
-        for (Map.Entry<Long, IPageEntry> entry : entries.entrySet()) {
-            if (entry.getValue() != null)
-                return false;
-        }
-        return true;
+        return entries.isEmpty();
     }
 
     public void removeEntries() {
