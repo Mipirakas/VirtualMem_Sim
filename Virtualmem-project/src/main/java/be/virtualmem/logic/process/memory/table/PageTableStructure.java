@@ -80,13 +80,13 @@ public class PageTableStructure {
                 pageTable = baseTable;
 
                 for (int i = 0; i < depth; i++) {
-                    Long pageTableOffset = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
+                    Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), i);
 
                     if (i < depth - 1) {
-                        pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableOffset)).getPointer();
+                        pageTable = (PageTable) ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex)).getPointer();
                     } else {
                         if (i == levels - 1) {
-                            PageTableEntry pte = (PageTableEntry) pageTable.getEntry(pageTableOffset);
+                            PageTableEntry pte = (PageTableEntry) pageTable.getEntry(pageTableIndex);
 
                             // Als page in frame zit, haal page uit frame
                             if (pte.getPfn() != null) {
@@ -94,16 +94,15 @@ public class PageTableStructure {
                                 PhysicalMemory.getInstance().removeFrame(pte.getPfn());
                             }
 
-                            pageTable.removeEntry(pageTableOffset);
+                            pageTable.removeEntry(pageTableIndex);
                         } else {
-                            PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableOffset);
+                            PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
 
-                            // pde zou nooit null mogen zijn maar is dat toch??
                             if (pde != null) {
                                 PageTable pt = (PageTable) pde.getPointer();
 
                                 if (pt != null && pt.isEmpty()) {
-                                    pageTable.removeEntry(pageTableOffset);
+                                    pageTable.removeEntry(pageTableIndex);
                                 }
                             }
                         }
