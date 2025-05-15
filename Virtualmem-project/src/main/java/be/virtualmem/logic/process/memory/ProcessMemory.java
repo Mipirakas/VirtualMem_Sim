@@ -17,6 +17,7 @@ import java.util.List;
 public class ProcessMemory {
     private PageTableStructure pageTableStructure;
     private int pid;
+    int count = 0;
 
     public ProcessMemory(int pid) {
         pageTableStructure = new PageTableStructure(Constants.PAGE_TABLE_ENTRIES.length);
@@ -33,6 +34,8 @@ public class ProcessMemory {
 
         try {
             // Try to get page from physical memory
+            count++;
+            //System.out.println(count);
             page = PhysicalMemory.getInstance().accessPage(pid, pageAddress);
         } catch (Exception e) {
             Statistics.getInstance().incrementPageFaultCount();
@@ -41,13 +44,14 @@ public class ProcessMemory {
         if (page == null) {
             // If page not in memory get from backing store
             page = BackingStore.getInstance().getPage(pid, pageAddress);
+
+            if (page != null) {
+                Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
+                Statistics.getInstance().incrementPageInCount();
+                pageTableEntry.setPfn(frameNumber);
+            }
         }
 
-        // Page not in memory yet
-        if (page != null && pageTableEntry.getPfn() == null) {
-            Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
-            pageTableEntry.setPfn(frameNumber);
-        }
 
         return page;
     }

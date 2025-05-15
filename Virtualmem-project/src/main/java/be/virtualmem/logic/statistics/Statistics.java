@@ -18,6 +18,7 @@ public class Statistics {
         pageInCount = 0;
         pageOutCount = 0;
         pageEvictionCount = 0;
+        pageFaultCount = 0;
     }
 
     public static Statistics getInstance() {

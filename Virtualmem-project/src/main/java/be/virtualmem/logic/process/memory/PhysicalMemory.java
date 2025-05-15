@@ -4,6 +4,7 @@ package be.virtualmem.logic.process.memory;
 import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
+import be.virtualmem.logic.process.memory.reallocation.SecondChanceAlgorithm;
 import be.virtualmem.logic.process.memory.reallocation.WeightedAgeFrequencyAlgorithm;
 import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.storage.BackingStore;
@@ -53,7 +54,6 @@ public class PhysicalMemory {
                         Statistics.getInstance().incrementPageOutCount();
                     oldPage.pageOut();
                 }
-                Statistics.getInstance().incrementPageInCount();
                 frame.setPage(page);
                 frame.setPid(pid);
             }

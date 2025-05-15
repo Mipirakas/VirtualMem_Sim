@@ -56,6 +56,7 @@ public class PageTableStructure {
                         PageDirectoryEntry pageDirectoryEntry = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
                         pageTable = pageDirectoryEntry.getPointer();
 
+                        // If pagetable does not exist yet make the page table
                         if (pageTable == null) {
                             PageTable pageTableToAdd = new PageTable(i + 1,
                                     i == levels - 2 ? PageTableEntry::new : PageDirectoryEntry::new);
