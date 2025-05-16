@@ -4,7 +4,6 @@ import be.virtualmem.global.address.Address;
 import be.virtualmem.global.address.AddressTranslator;
 import be.virtualmem.logic.process.memory.Page;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
-import be.virtualmem.logic.process.memory.entry.IPageEntry;
 import be.virtualmem.logic.process.memory.entry.PageDirectoryEntry;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 
@@ -100,9 +99,10 @@ public class PageTableStructure {
 
     private PageTable getPageTableAtLevel(Address address, int level) {
         PageTable pageTable = baseTable;
+        Long pageTableIndex;
 
         for (int i = 0; i < level; i++) {
-            Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
+            pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
 
             if (pageTableIndex != null) {
                 PageDirectoryEntry pageDirectoryEntry = ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex));
@@ -113,7 +113,6 @@ public class PageTableStructure {
 
                 if (pageTable == null) return null;
             }
-
         }
 
         return pageTable;
