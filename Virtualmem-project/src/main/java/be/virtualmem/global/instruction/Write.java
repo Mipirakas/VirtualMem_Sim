@@ -3,6 +3,7 @@ package be.virtualmem.global.instruction;
 import be.virtualmem.global.address.Address;
 import be.virtualmem.logic.exception.PageNotMappedException;
 import be.virtualmem.logic.process.IProcessManager;
+import be.virtualmem.logic.process.memory.ProcessMemory;
 import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.statistics.action.IAction;
 import be.virtualmem.logic.statistics.action.Property;
@@ -19,17 +20,24 @@ public class Write implements IInstruction {
 
     @Override
     public void execute(IProcessManager processManager) {
+        // Statistics
+        IAction action = new WriteAction();
+        action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
+
         try {
-            processManager.getProcess(pid).getProcessMemory().write(address);
+            ProcessMemory processMemory = processManager.getProcess(pid).getProcessMemory();
+            processMemory.write(address);
+            action.addProperty(Property.PHYSICAL_ADDRESS,
+                    processMemory.getPhysicalAddress(address,
+                            processMemory.getPageTableStructure().getPageTableEntry(address).getPfn()).getAsHex());
         } catch (PageNotMappedException e) {
             processManager.endProcess(pid);
-            IAction action = new WriteAction();
-            action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
             action.addProperty(Property.PAGE_NOT_MAPPED_ERROR, e.getMessage());
-            Statistics.getInstance().addAction(action);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Statistics.getInstance().addAction(action);
     }
 
     @Override

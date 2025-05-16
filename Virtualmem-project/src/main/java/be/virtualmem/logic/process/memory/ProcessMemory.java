@@ -6,10 +6,6 @@ import be.virtualmem.logic.exception.PageNotMappedException;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.process.memory.table.PageTableStructure;
 import be.virtualmem.logic.statistics.Statistics;
-import be.virtualmem.logic.statistics.action.IAction;
-import be.virtualmem.logic.statistics.action.Property;
-import be.virtualmem.logic.statistics.action.ReadAction;
-import be.virtualmem.logic.statistics.action.WriteAction;
 import be.virtualmem.logic.storage.BackingStore;
 
 import java.util.ArrayList;
@@ -24,13 +20,13 @@ public class ProcessMemory {
         this.pid = pid;
     }
 
-    private Page getPage(Address address) throws Exception {
+    private Page getPage(Address address) throws PageNotMappedException {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         if (pageTableEntry == null)
             throw new PageNotMappedException();
 
         Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
-        Page page = null;
+        Page page;
 
         try {
             // Try to get page from physical memory
@@ -62,12 +58,6 @@ public class ProcessMemory {
         if (page != null)
             page.setAccessed(1);
 
-        // Statistics
-        IAction action = new ReadAction();
-        action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
-        action.addProperty(Property.PHYSICAL_ADDRESS, getPhysicalAddress(address, pageTableEntry.getPfn()).getAsHex());
-        Statistics.getInstance().addAction(action);
-
         pageTableEntry.read();
     }
 
@@ -82,12 +72,6 @@ public class ProcessMemory {
             page.setAccessed(1);
             page.setDirty(1);
         }
-
-        // Statistics
-        IAction action = new WriteAction();
-        action.addProperty(Property.VIRTUAL_ADDRESS, address.getAsHex());
-        action.addProperty(Property.PHYSICAL_ADDRESS, getPhysicalAddress(address, pageTableEntry.getPfn()).getAsHex());
-        Statistics.getInstance().addAction(action);
 
         pageTableEntry.write();
     }
@@ -122,7 +106,7 @@ public class ProcessMemory {
         pageTableStructure.unmapPageTables(pagesToRemove);
     }
 
-    private Address getPhysicalAddress(Address address, Integer frameNumber) {
+    public Address getPhysicalAddress(Address address, Integer frameNumber) {
         if (frameNumber == null)
             throw new NullPointerException("Frame number is null!");
         Long decimalValue = (long) (frameNumber * Math.pow(2, Constants.PAGE_SIZE));
