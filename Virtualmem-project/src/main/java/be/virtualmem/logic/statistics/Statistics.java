@@ -14,19 +14,19 @@ public class Statistics {
     Deque<IAction> actions;
 
     private Statistics() {
+        init();
+    }
+
+    public void resetStatistics() {
+        init();
+    }
+
+    private void init() {
         actions = new ArrayDeque<>();
         pageInCount = 0;
         pageOutCount = 0;
         pageEvictionCount = 0;
         pageFaultCount = 0;
-    }
-
-    public void resetStatistics() {
-        pageInCount = 0;
-        pageOutCount = 0;
-        pageEvictionCount = 0;
-        pageFaultCount = 0;
-        actions.clear();
     }
 
     public static Statistics getInstance() {
