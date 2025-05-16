@@ -27,7 +27,6 @@ public class PhysicalMemory {
     }
 
     public void resetPhysicalMemory() {
-        frames.clear();
         init();
     }
 
@@ -42,7 +41,12 @@ public class PhysicalMemory {
     }
 
     public void setAlgorithm(IAlgorithm algorithm) {
-        this.algorithm = algorithm;
+        if (algorithm != null) {
+            if (algorithm instanceof SecondChanceAlgorithm)
+                this.algorithm = new SecondChanceAlgorithm(frames);
+            else if (algorithm instanceof WeightedAgeFrequencyAlgorithm)
+                this.algorithm = new WeightedAgeFrequencyAlgorithm(frames);
+        }
     }
 
     public static PhysicalMemory getInstance() {

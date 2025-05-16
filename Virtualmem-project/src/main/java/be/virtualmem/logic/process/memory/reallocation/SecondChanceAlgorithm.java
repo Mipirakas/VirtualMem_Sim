@@ -11,6 +11,8 @@ public class SecondChanceAlgorithm implements IAlgorithm {
     private TreeMap<Integer, Frame> frames;
     private ReorderingSet<Integer> reorderingSet;
 
+    public SecondChanceAlgorithm(){}
+
     public SecondChanceAlgorithm(Map<Integer, Frame> frames) {
         this.frames = new TreeMap<>(frames);
         reorderingSet = new ReorderingSet<>();

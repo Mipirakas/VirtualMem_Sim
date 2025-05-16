@@ -12,6 +12,8 @@ public class WeightedAgeFrequencyAlgorithm implements IAlgorithm {
     private TreeMap<Integer, Frame> frames;
     private int weight;
 
+    public WeightedAgeFrequencyAlgorithm(){}
+
     public WeightedAgeFrequencyAlgorithm(Map<Integer, Frame> frames) {
         this.frames = new TreeMap<>(frames);
         this.weight = Constants.WAF_WEIGHT;

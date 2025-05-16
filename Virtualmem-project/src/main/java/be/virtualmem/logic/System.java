@@ -2,6 +2,7 @@ package be.virtualmem.logic;
 
 import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.PhysicalMemory;
+import be.virtualmem.logic.process.memory.reallocation.IAlgorithm;
 import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.storage.BackingStore;
 
@@ -10,9 +11,9 @@ public class System implements ISystemContext {
     private InstructionManager instructionManager;
     private String dataset;
 
-    // parameter: reallocation algorithm
-    public System(String dataset) {
+    public System(String dataset, IAlgorithm algorithm) {
         this.dataset = dataset;
+        PhysicalMemory.getInstance().setAlgorithm(algorithm);
         resetSingleton();
         boot();
     }

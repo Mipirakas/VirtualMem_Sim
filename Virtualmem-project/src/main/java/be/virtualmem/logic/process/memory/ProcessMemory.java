@@ -2,6 +2,7 @@ package be.virtualmem.logic.process.memory;
 
 import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
+import be.virtualmem.logic.exception.PageNotMappedException;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.process.memory.table.PageTableStructure;
 import be.virtualmem.logic.statistics.Statistics;
@@ -23,10 +24,10 @@ public class ProcessMemory {
         this.pid = pid;
     }
 
-    private Page getPage(Address address) {
+    private Page getPage(Address address) throws Exception {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         if (pageTableEntry == null)
-            throw new NullPointerException("Page not mapped yet!");
+            throw new PageNotMappedException();
 
         Address pageAddress = address.getSubAddress(Constants.ADDRESS_OFFSET_BITS, Constants.BIT_ADDRESSABLE, false);
         Page page = null;
@@ -54,8 +55,7 @@ public class ProcessMemory {
     public void read(Address address) throws Exception {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         if (pageTableEntry == null)
-            throw new NullPointerException("Page not mapped yet!");
-
+            throw new PageNotMappedException();
 
         Page page = getPage(address);
 
@@ -74,7 +74,7 @@ public class ProcessMemory {
     public void write(Address address) throws Exception {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
         if (pageTableEntry == null)
-            throw new NullPointerException("Page not mapped yet!");
+            throw new PageNotMappedException();
 
         Page page = getPage(address);
 

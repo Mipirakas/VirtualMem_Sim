@@ -1,6 +1,7 @@
 package be.virtualmem;
 
 import be.virtualmem.global.Constants;
+import be.virtualmem.logic.process.memory.reallocation.WeightedAgeFrequencyAlgorithm;
 import be.virtualmem.logic.statistics.Statistics;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class Experimental {
         Map<Integer, Integer> results = new HashMap();
 
         for (int frame : framesToSet) {
-            be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MANY_INSTRUCTION_DATASET);
+            be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MANY_INSTRUCTION_DATASET, new WeightedAgeFrequencyAlgorithm());
             system.runAllInstructions();
 
             results.put(frame, Statistics.getInstance().getPageInCount());
