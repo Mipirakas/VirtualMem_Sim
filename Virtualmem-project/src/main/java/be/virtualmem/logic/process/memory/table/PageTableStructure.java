@@ -105,7 +105,11 @@ public class PageTableStructure {
             Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(address, i);
 
             if (pageTableIndex != null) {
-                pageTable = ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex)).getPointer();
+                PageDirectoryEntry pageDirectoryEntry = ((PageDirectoryEntry) pageTable.getEntry(pageTableIndex));
+
+                if (pageDirectoryEntry == null) return null;
+
+                pageTable = pageDirectoryEntry.getPointer();
 
                 if (pageTable == null) return null;
             }

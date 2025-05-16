@@ -18,6 +18,10 @@ public class BackingStore {
         return instance;
     }
 
+    public void resetBackingStore() {
+        backingStores.clear();
+    }
+
     public void addPage(Integer pid, Address address, Page page) {
         backingStores.putIfAbsent(pid, new HashMap<>());
         backingStores.get(pid).put(address, page);

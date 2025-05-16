@@ -8,6 +8,10 @@ public class SystemClock {
         time = 0;
     }
 
+    public void resetSystemClock() {
+        time = 0;
+    }
+
     public static SystemClock getInstance() {
         return instance;
     }

@@ -1,20 +1,26 @@
 package be.virtualmem.logic;
 
 import be.virtualmem.logic.process.ProcessManager;
+import be.virtualmem.logic.process.memory.PhysicalMemory;
+import be.virtualmem.logic.statistics.Statistics;
+import be.virtualmem.logic.storage.BackingStore;
 
 public class System implements ISystemContext {
     private ProcessManager processManager;
     private InstructionManager instructionManager;
+    private String dataset;
 
     // parameter: reallocation algorithm
-    public System() {
+    public System(String dataset) {
+        this.dataset = dataset;
+        resetSingleton();
         boot();
     }
 
     public void boot(){
         // Add the instructions
         processManager = ProcessManager.getInstance();
-        instructionManager = new InstructionManager(processManager);
+        instructionManager = new InstructionManager(processManager, dataset);
     }
 
     // run next instruction
@@ -42,5 +48,12 @@ public class System implements ISystemContext {
 
     public boolean hasFinished() {
         return instructionManager.hasFinished();
+    }
+
+    private void resetSingleton() {
+        Statistics.getInstance().resetStatistics();
+        SystemClock.getInstance().resetSystemClock();
+        PhysicalMemory.getInstance().resetPhysicalMemory();
+        BackingStore.getInstance().resetBackingStore();
     }
 }

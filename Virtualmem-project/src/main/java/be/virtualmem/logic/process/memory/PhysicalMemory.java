@@ -23,6 +23,15 @@ public class PhysicalMemory {
     // Reallocation algorithm
 
     private PhysicalMemory() {
+        init();
+    }
+
+    public void resetPhysicalMemory() {
+        frames.clear();
+        init();
+    }
+
+    private void init() {
         frames = new HashMap<>();
 
         for (int i = 0; i < Constants.FRAMES_IN_RAM; i++){
@@ -30,6 +39,10 @@ public class PhysicalMemory {
         }
 
         algorithm = new WeightedAgeFrequencyAlgorithm(frames);
+    }
+
+    public void setAlgorithm(IAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
     public static PhysicalMemory getInstance() {

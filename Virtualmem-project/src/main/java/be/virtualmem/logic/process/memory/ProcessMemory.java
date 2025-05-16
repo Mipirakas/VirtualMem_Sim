@@ -128,6 +128,8 @@ public class ProcessMemory {
     }
 
     private Address getPhysicalAddress(Address address, Integer frameNumber) {
+        if (frameNumber == null)
+            throw new NullPointerException("Frame number is null!");
         Long decimalValue = (long) (frameNumber * Math.pow(2, Constants.PAGE_SIZE));
         decimalValue += address.getSubAddress(0, Constants.ADDRESS_OFFSET_BITS, true).getAsInteger();
         return Address.fromDecimalToAddress(decimalValue);

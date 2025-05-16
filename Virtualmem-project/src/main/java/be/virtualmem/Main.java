@@ -1,5 +1,6 @@
 package be.virtualmem;
 
+import be.virtualmem.global.Constants;
 import be.virtualmem.presentation.gui.controller.MainController;
 import be.virtualmem.presentation.tui.Navigator;
 
@@ -7,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        be.virtualmem.logic.System system = new be.virtualmem.logic.System();
+        be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MEDIUM_INSTRUCTION_DATASET);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Run the simulation in the GUI enter 'y', in the TUI enter 'n'");
         String selection = scanner.nextLine();

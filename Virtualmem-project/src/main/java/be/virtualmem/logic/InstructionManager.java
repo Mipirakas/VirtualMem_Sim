@@ -12,8 +12,8 @@ public class InstructionManager {
     private ProcessManager processManager;
     private IInstruction lastInstruction;
 
-    public InstructionManager(ProcessManager processManager) {
-        instructionQueue = InstructionReader.readFromFile(Constants.MANY_INSTRUCTION_DATASET);
+    public InstructionManager(ProcessManager processManager, String dataset) {
+        instructionQueue = InstructionReader.readFromFile(dataset);
         this.processManager = processManager;
     }
 
