@@ -34,6 +34,7 @@ public class Experimental {
         Map<Integer, Integer> results = new HashMap();
 
         for (int frame : framesToSet) {
+            Constants.FRAMES_IN_RAM = frame;
             be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MANY_INSTRUCTION_DATASET, new WeightedAgeFrequencyAlgorithm());
             system.runAllInstructions();
 

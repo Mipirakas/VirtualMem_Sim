@@ -19,7 +19,7 @@ public class Read implements IInstruction {
 
     @Override
     public void execute(IProcessManager processManager) {
-        try {
+        try {ReadAction
             processManager.getProcess(pid).getProcessMemory().read(address);
         } catch (PageNotMappedException e) {
             processManager.endProcess(pid);
