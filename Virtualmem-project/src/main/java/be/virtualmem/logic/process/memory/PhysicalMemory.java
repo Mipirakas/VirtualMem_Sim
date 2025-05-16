@@ -18,6 +18,7 @@ import java.util.Optional;
 public class PhysicalMemory {
     private static final PhysicalMemory instance = new PhysicalMemory();
     private IAlgorithm algorithm;
+    private IAlgorithm setAlgorithm;
 
     private Map<Integer, Frame> frames;
     // Reallocation algorithm
@@ -37,11 +38,15 @@ public class PhysicalMemory {
             frames.put(i, new Frame());
         }
 
-        algorithm = new WeightedAgeFrequencyAlgorithm(frames);
+        if (setAlgorithm != null)
+            setAlgorithm(setAlgorithm);
+        else
+            algorithm = new WeightedAgeFrequencyAlgorithm(frames);
     }
 
     public void setAlgorithm(IAlgorithm algorithm) {
         if (algorithm != null) {
+            setAlgorithm = algorithm;
             if (algorithm instanceof SecondChanceAlgorithm)
                 this.algorithm = new SecondChanceAlgorithm(frames);
             else if (algorithm instanceof WeightedAgeFrequencyAlgorithm)

@@ -72,7 +72,11 @@ public class SecondChanceAlgorithm implements IAlgorithm {
                 }
             }
         }
-        throw new IllegalStateException("No frame found");
+
+        if (frames.isEmpty())
+            throw new IllegalStateException("No frame found");
+        else
+            return frames.firstKey();
     }
 
     private Integer getClass(PageState pageState) {
