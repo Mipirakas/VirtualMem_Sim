@@ -44,7 +44,7 @@ public class PageTableStructure {
 
                     if (i < levels - 1) {
                         PageDirectoryEntry pageDirectoryEntry = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
-                        pageTable = pageDirectoryEntry.getPointer();
+                        pageTable = pageDirectoryEntry.getPageTable();
 
                         // If pagetable does not exist yet make the page table
                         if (pageTable == null) {
@@ -90,7 +90,7 @@ public class PageTableStructure {
                     Long pageTableIndex = AddressTranslator.fromAddressToPageTableLevelEntryId(page.getAddress(), depth);
                     PageDirectoryEntry pde = (PageDirectoryEntry) pageTable.getEntry(pageTableIndex);
 
-                    if (pde != null && pde.getPointer().isEmpty()) {
+                    if (pde != null && pde.getPageTable().isEmpty()) {
                         pageTable.removeEntry(pageTableIndex);
                     }
                 }
@@ -109,7 +109,7 @@ public class PageTableStructure {
 
                 if (pageDirectoryEntry == null) return null;
 
-                pageTable = pageDirectoryEntry.getPointer();
+                pageTable = pageDirectoryEntry.getPageTable();
 
                 if (pageTable == null) return null;
             }
