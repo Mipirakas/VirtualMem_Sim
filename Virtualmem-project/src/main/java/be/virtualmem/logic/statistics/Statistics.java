@@ -75,6 +75,14 @@ public class Statistics {
         return pageInCount;
     }
 
+    public int getPageOutCount() {
+        return pageOutCount;
+    }
+
+    public int getPageEvictionCount() {
+        return pageEvictionCount;
+    }
+
     public Map<String, Integer> map() {
         Map<String, Integer> map = new HashMap<>();
         map.put("pageInCount", pageInCount);
