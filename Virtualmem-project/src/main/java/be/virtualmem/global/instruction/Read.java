@@ -36,6 +36,8 @@ public class Read implements IInstruction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Statistics.getInstance().addAction(action);
     }
 
     @Override
