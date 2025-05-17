@@ -9,10 +9,7 @@ import be.virtualmem.logic.process.memory.reallocation.WeightedAgeFrequencyAlgor
 import be.virtualmem.logic.statistics.Statistics;
 import be.virtualmem.logic.storage.BackingStore;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 // Singleton
 public class PhysicalMemory {
@@ -58,9 +55,7 @@ public class PhysicalMemory {
         return instance;
     }
 
-    public Integer swapPage(Page page, int pid) {
-        // Return the frame where the page was inserted based on
-        Integer frameId = algorithm.frameIdToReallocate();
+    public void swapPage(Integer frameId, int pid, Page page) {
         Page oldPage;
 
         if (frameId != null) {
@@ -75,16 +70,25 @@ public class PhysicalMemory {
                     if (oldPage.getDirty() == 1)
                         Statistics.getInstance().incrementPageOutCount();
                     oldPage.pageOut();
+
                 }
+                Statistics.getInstance().incrementPageInCount();
                 frame.setPage(page);
                 frame.setPid(pid);
             }
         }
-        return frameId;
+    }
+
+    public Integer frameIdToReallocate() {
+        return algorithm.frameIdToReallocate();
     }
 
     public Map<Integer, Frame> getFrames() {
         return frames;
+    }
+
+    public Frame getFrame(int frameId) {
+        return frames.get(frameId);
     }
 
     public Page accessPage(int pid, Address address) throws Exception {

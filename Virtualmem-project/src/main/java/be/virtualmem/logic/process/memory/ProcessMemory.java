@@ -2,7 +2,9 @@ package be.virtualmem.logic.process.memory;
 
 import be.virtualmem.global.Constants;
 import be.virtualmem.global.address.Address;
+import be.virtualmem.global.process.Process;
 import be.virtualmem.logic.exception.PageNotMappedException;
+import be.virtualmem.logic.process.ProcessManager;
 import be.virtualmem.logic.process.memory.entry.PageTableEntry;
 import be.virtualmem.logic.process.memory.table.PageTableStructure;
 import be.virtualmem.logic.statistics.Statistics;
@@ -22,6 +24,7 @@ public class ProcessMemory {
 
     private Page getPage(Address address) throws PageNotMappedException {
         PageTableEntry pageTableEntry = pageTableStructure.getPageTableEntry(address);
+
         if (pageTableEntry == null)
             throw new PageNotMappedException();
 
@@ -39,8 +42,17 @@ public class ProcessMemory {
             page = BackingStore.getInstance().getPage(pid, pageAddress);
 
             if (page != null) {
-                Integer frameNumber = PhysicalMemory.getInstance().swapPage(page, pid);
-                Statistics.getInstance().incrementPageInCount();
+                Integer frameNumber = PhysicalMemory.getInstance().frameIdToReallocate();
+                Frame frame = PhysicalMemory.getInstance().getFrame(frameNumber);
+                Process oldProcess = ProcessManager.getInstance().getProcess(frame.getPid());
+                // If there is a page in the frame, and it is about to be swapped out,
+                // We need to clear the pfn in the corresponding PTE
+                if (oldProcess != null) {
+                    oldProcess.getProcessMemory().getPageTableStructure()
+                            .getPageTableEntry(frame.getPage().getAddress()).clearPfn();
+                }
+
+                PhysicalMemory.getInstance().swapPage(frameNumber, pid, page);
                 pageTableEntry.setPfn(frameNumber);
             }
         }
