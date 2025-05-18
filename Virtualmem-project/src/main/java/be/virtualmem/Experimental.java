@@ -39,7 +39,7 @@ public class Experimental {
 
         for (int frame : framesToSet) {
             Constants.FRAMES_IN_RAM = frame;
-            be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MEDIUM_INSTRUCTION_DATASET, new SecondChanceAlgorithm());
+            be.virtualmem.logic.System system = new be.virtualmem.logic.System(Constants.MEDIUM_INSTRUCTION_DATASET, new WeightedAgeFrequencyAlgorithm());
             system.runAllInstructions();
 
             results.put(frame, Statistics.getInstance().getPageInCount());
