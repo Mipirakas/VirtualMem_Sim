@@ -16,7 +16,7 @@ public class Constants {
     public static final String FEW_INSTRUCTION_DATASET = "datasets/few_instructions.txt";
     public static final String RESULTS_DIR = "results/";
 
-    public static int WAF_WEIGHT = 35;
+    public static int WAF_WEIGHT = 60;
     public static final int WAF_MAX_FREQUENCY = 500;
 
 }
