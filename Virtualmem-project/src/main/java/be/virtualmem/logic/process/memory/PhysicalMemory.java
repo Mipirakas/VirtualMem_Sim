@@ -71,7 +71,6 @@ public class PhysicalMemory {
                         BackingStore.getInstance().addPage(frame.getPid(), oldPage.getAddress(), oldPage);
                     }
                     oldPage.pageOut();
-
                 }
                 Statistics.getInstance().incrementPageInCount();
                 frame.setPage(page);
@@ -118,7 +117,18 @@ public class PhysicalMemory {
     }
 
     public void removeFrame(int pfn) {
-        frames.get(pfn).setPage(null);
+        Frame frame = frames.get(pfn);
+        Page page = frame.getPage();
+        if (page != null) {
+            Statistics.getInstance().incrementPageEvictionCount();
+            // If the page was written to
+            if (page.getDirty() == 1) {
+                Statistics.getInstance().incrementPageOutCount();
+                BackingStore.getInstance().addPage(frame.getPid(), page.getAddress(), page);
+            }
+            page.pageOut();
+        }
+        frame.setPage(null);
     }
 
     public int getAlgoStartIndex() {
